@@ -140,7 +140,7 @@ export default {
   methods: {
     // dengan token 
     async fetchData() {
-      const response = await axios.get("http://localhost:8000/api/auth/list-user", {
+      const response = await axios.get("https://backend-webmember.lumirainternational.com/api/auth/list-user", {
         headers: {
           Authorization: "Bearer " + sessionStorage.getItem("token"),
         },
@@ -164,7 +164,7 @@ export default {
     },
     deleteItem(id) {
       axios
-        .delete(`http://localhost:8000/api/auth/user/${id}`, {
+        .delete(`https://backend-webmember.lumirainternational.com/api/auth/user/${id}`, {
           headers: {
             Authorization: "Bearer " + sessionStorage.getItem("token"),
           },

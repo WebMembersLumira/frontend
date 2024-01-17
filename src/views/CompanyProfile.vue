@@ -20,7 +20,9 @@
         </p>
       </div>
       <div class="col-md-6">
-        <div class="kotak"></div>
+        <div class="kotak">
+          <img src="/img/logo.jpg" alt="ALc" width="300">
+        </div>
       </div>
     </div>
     <div class="row mt-5 pb-5">
@@ -38,12 +40,12 @@
   </div>
 </template>
 <style scoped>
-.kotak {
+/* .kotak {
   border: 1px solid black;
   margin: 15px;
   height: 80%;
   width: 80%;
-}
+} */
 h1,
 p {
   color: black;

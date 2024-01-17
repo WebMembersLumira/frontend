@@ -2,8 +2,7 @@
   <div class="container bg-warning">
     <div class="row">
       <div class="col-md-6">
-        <h1>Super</h1>
-        <h1>class.id</h1>
+        <h1>Alicornbot</h1>
       </div>
       <div class="col-md-6">
         <a href="#" class="float-end">Contact Us</a>

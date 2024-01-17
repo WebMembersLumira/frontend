@@ -36,7 +36,7 @@ const toggleSidebar = () => {
                   data-toggle="modal"
                   data-target="#addInvoiceModal"
                 >
-                  Tambah Invoice
+                  Tambah Layanan
                 </button>
               </div>
               <div class="col-sm-9">
@@ -138,6 +138,42 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <!-- Form Tambah Invoice -->
           <form @submit.prevent="addInvoice">
+            <div class="form-group">
+              <label for="nomorRekening">Waktu Langganan</label>
+              <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    v-model="metodePembayaran"
+                  >
+                    <option value="0" selected>Pilih Waktu Langganan</option>
+                    <option value="mandiri">1 Bulan</option>
+                    <option value="bri">6 Bulan</option>
+                    <option value="bni">1 Tahun</option>
+                  </select>
+            </div>
+            <div class="form-group">
+              <label for="nomorRekening">Rekening Tujuan</label>
+              <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    v-model="metodePembayaran"
+                  >
+                    <option value="0" selected>Pilih Rekening Tujuan</option>
+                    <option value="mandiri">Mandiri - Bagus Untoro - 23472347234324</option>
+                    <option value="bri">BRI - Bagus Untoro - 23472347234324</option>
+                    <option value="bni">BNI - Bagus Untoro - 23472347234324</option>
+                  </select>
+            </div>
+            <div class="form-group">
+              <label for="nomorRekening">Jumlah Bayar</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nomorRekening"
+                value="100000"
+                disabled
+              />
+            </div>
             <div class="form-group">
               <label for="nomorRekening">Nomor Rekening</label>
               <input

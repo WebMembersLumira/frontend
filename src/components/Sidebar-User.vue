@@ -14,8 +14,7 @@
         <!-- <img src="/img/logo.png" alt="logo" width="50" /> -->
       </div>
       <div class="sidebar-brand-text ms-3">
-        <span style="color:#061387;">Web</span>
-        <span style="color:#fac800">Members</span>
+                <span class="text-primary">Alicorn<span class="text-warning">bot</span></span>
       </div>
     </a>
 

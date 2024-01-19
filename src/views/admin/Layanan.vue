@@ -35,7 +35,7 @@ const toggleSidebar = () => {
                 data-toggle="modal"
                 data-target="#updateLayanan"
               >
-                Update Layanan
+                Atur Layanan
               </button>
             </div>
             <div class="col-sm-6">
@@ -44,7 +44,7 @@ const toggleSidebar = () => {
                 data-toggle="modal"
                 data-target="#updateRekening"
               >
-                Update Rekening
+                Atur Rekening
               </button>
             </div>
           </div>

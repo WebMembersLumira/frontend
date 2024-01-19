@@ -113,7 +113,7 @@ export default {
           Swal.fire({
             icon: "success",
             title: "Pendaftaran berhasil!",
-            text: "Anda telah berhasil mendaftar.",
+            text: "Silahkan cek email untuk aktivasi akun.",
             confirmButtonText: "OK",
           }).then(() => {
             // Arahkan pengguna ke rute '/'

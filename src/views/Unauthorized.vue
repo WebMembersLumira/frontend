@@ -10,7 +10,7 @@ export default {
   name: 'Unauthorized',
   mounted() {
         const body = document.querySelector('body');
-        body.style.backgroundImage = 'url(/img/wilayah.png)';
+        body.style.backgroundImage = 'url(/img/logo.jpg)';
         body.style.backgroundRepeat = 'no-repeat';
         body.style.backgroundSize = 'cover';
     }

@@ -39,12 +39,6 @@
   </div>
 </template>
 <style scoped>
-/* .kotak {
-  border: 1px solid black;
-  margin: 15px;
-  height: 80%;
-  width: 80%;
-} */
 h1,
 p {
   color: black;

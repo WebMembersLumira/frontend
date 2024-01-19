@@ -32,10 +32,104 @@ const toggleSidebar = () => {
           >
             <h1 class="h3 mb-0 text-gray-800 text-center">Dashboard</h1>
           </div>
+          <!-- Content Row -->
+          <div class="row">
+            <!-- Pending -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div
+                        class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                      >
+                        Invoice Pending
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        {{pending}}
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Active -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div
+                        class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                      >
+                        Invoice Active
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        {{active}}
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Expired -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div
+                        class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+                      >
+                        Invoice Expired
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        {{expired}}
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-comments fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reject -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div
+                        class="text-xs font-weight-bold text-danger text-uppercase mb-1"
+                      >
+                        Invoice Reject
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        {{reject}}
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-comments fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Content Row -->
-          <ChatMe />
 
+          <ChatMe />
         </div>
         <!-- /.container-fluid -->
       </div>
@@ -63,57 +157,76 @@ export default {
   data() {
     return {
       role: null,
-      lokasi: "",
-      note: "",
-      user: "",
+      pending:'',
+      active:'',
+      expired:'',
+      reject:'',
+      perpanjang:''
     };
   },
-  methods: {
-    async dataLokasi() {
-      try {
-        const response = await axios.get(`https://10.11.10.243/backend/public/api/lokasi`);
-        this.lokasi = response.data.data.length;
-        console.log("test lokasi: ", this.lokasi);
-      } catch (error) {
-        console.error(error);
-        const data = JSON.stringify(error.message);
-        sessionStorage.setItem("error", data);
-      }
-    },
-    async fetchNote() {
+   methods: {
+    async getDataInvoice() {
       try {
         const response = await axios.get(
-          `https://10.11.10.243/backend/public/api/auth/notes`,
+          `https://backend-webmember.lumirainternational.com/api/auth/statistik-invoice`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
             },
           }
         );
-        this.note = response.data.data.length;
+        this.pending = response.data.jumlahPending;
+        this.active = response.data.jumlahActive;
+        this.expired = response.data.jumlahExpired;
+        this.reject = response.data.jumlahReject;
+        this.perpanjang = response.data.jumlahPerpanjangan;
       } catch (error) {
         console.error(error);
-        const data = JSON.stringify(error.message);
-        sessionStorage.setItem("error", data);
       }
     },
-    async fetchUser() {
-      try {
-        const response = await axios.get("https://10.11.10.243/backend/public/api/auth/user", {
-          headers: {
-            Authorization: "Bearer " + sessionStorage.getItem("token"),
-          },
-        });
-        this.user = response.data.data.length;
-      } catch (error) {
-        console.error(error);
-        const data = JSON.stringify(error.message);
-        sessionStorage.setItem("error", data);
-      }
-    },
+    
   },
   created() {
-   
+    const token = sessionStorage.getItem("token"); // Ambil token dari local storage
+
+    if (token) {
+      try {
+        const [headerBase64, signatureBase64] = token.split(".");
+        const header = JSON.parse(atob(headerBase64));
+        const signature = atob(signatureBase64);
+
+        const tokenPayload = JSON.parse(atob(token.split(".")[1])); // Mendekode bagian payload dari token JWT
+        const expTimestamp = tokenPayload.exp;
+
+        const expDate = new Date(expTimestamp * 1000); // Konversi Unix Timestamp ke JavaScript Date
+
+        console.log("Waktu Kedaluwarsa (UTC):", expDate.toUTCString()); // Tampilkan waktu kedaluwarsa dalam format UTC
+
+        if (new Date() > expDate) {
+          console.log("Keluar");
+          sessionStorage.removeItem("token");
+          this.$router.push("/");
+        } else {
+          console.log("Aman");
+        }
+        const level = tokenPayload.level; // Ambil level pengguna dari payload
+        this.user_id = tokenPayload.id;
+        console.log("ini idddd:", this.user_id);
+        if (level !== "1") {
+          this.$router.push("/unauthorized");
+        } else if (!header || !signature) {
+          this.$router.push("/");
+        }
+        // success
+        this.getDataInvoice();
+        // akhir
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        this.$router.push("/"); // Tindakan jika terjadi kesalahan dekode
+      }
+    } else {
+      this.$router.push("/"); // Tindakan jika token tidak ada (pengguna belum terautentikasi)
+    }
   },
 };
 </script>

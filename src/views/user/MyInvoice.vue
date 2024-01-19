@@ -71,27 +71,68 @@ const toggleSidebar = () => {
                       <!-- Tampilkan gambar di dalam tabel -->
                       <img
                         :src="
-                          'https://backend-webmember.lumirainternational.com/storage/' + item.bukti_transfer
+                          'https://backend-webmember.lumirainternational.com/storage/' +
+                          item.bukti_transfer
                         "
                         alt="Bukti Transfer"
                         style="max-width: 100px"
                       />
                     </td>
-                    <td>{{ item.tanggal_berakhir != null ? item.tanggal_berakhir : 'Belum Diatur' }}</td>
                     <td>
                       {{
-                        item.status === "0"
-                          ? "Pending"
-                          : item.status === "1"
-                          ? "Active"
-                          : item.status === "2"
-                          ? "Expired"
-                          : "Reject"
+                        item.tanggal_berakhir != null
+                          ? item.tanggal_berakhir
+                          : "Belum Diatur"
                       }}
                     </td>
                     <td>
-                      <!-- <button class="btn btn-warning" v-if="item.tanggal_berakhir > today">Perpanjang</button>
-                      <button class="btn btn-success" v-if="item.tanggal_berakhir < today">Perpanjang</button> -->
+                      <div
+                        class="bg-warning rounded text-center"
+                        v-if="item.status == '0'"
+                      >
+                        Pending
+                      </div>
+                      <div
+                        class="bg-success rounded text-center"
+                        v-if="item.status == '1'"
+                      >
+                        Active
+                      </div>
+                      <div
+                        class="bg-secondary rounded text-center"
+                        v-if="item.status == '3'"
+                      >
+                        Expired
+                      </div>
+                      <div
+                        class="bg-danger rounded text-center text-white"
+                        v-if="item.status == '2'"
+                      >
+                        Reject
+                      </div>
+                      <div
+                        class="bg-primary rounded text-center text-white"
+                        v-if="item.status == '00'"
+                      >
+                        Perpanjang
+                      </div>
+                    </td>
+                    <td>
+                      <button
+                        class="btn btn-warning"
+                        data-toggle="modal"
+                        data-target="#editInvoice"
+                      >
+                        Update
+                      </button>
+                      <button 
+                      class="btn btn-success" 
+                      v-if="item.status == '3'"
+                      data-toggle="modal"
+                        data-target="#perpanjangModal"
+                        >
+                        Perpanjang
+                      </button>
                     </td>
                   </tr>
                 </tbody>
@@ -139,47 +180,41 @@ const toggleSidebar = () => {
           <!-- Form Tambah Invoice -->
           <form @submit.prevent="addInvoice">
             <div class="form-group">
-              <label for="nomorRekening">Waktu Langganan</label>
-              <select
-                    class="form-select"
-                    aria-label="Default select example"
-                    v-model="metodePembayaran"
-                  >
-                    <option value="0" selected>Pilih Waktu Langganan</option>
-                    <option value="mandiri">1 Bulan</option>
-                    <option value="bri">6 Bulan</option>
-                    <option value="bni">1 Tahun</option>
-                  </select>
-            </div>
-            <div class="form-group">
-              <label for="nomorRekening">Rekening Tujuan</label>
-              <select
-                    class="form-select"
-                    aria-label="Default select example"
-                    v-model="metodePembayaran"
-                  >
-                    <option value="0" selected>Pilih Rekening Tujuan</option>
-                    <option value="mandiri">Mandiri - Bagus Untoro - 23472347234324</option>
-                    <option value="bri">BRI - Bagus Untoro - 23472347234324</option>
-                    <option value="bni">BNI - Bagus Untoro - 23472347234324</option>
-                  </select>
-            </div>
-            <div class="form-group">
-              <label for="nomorRekening">Jumlah Bayar</label>
+              <label for="durasi">Durasi</label>
               <input
                 type="text"
                 class="form-control"
-                id="nomorRekening"
-                value="100000"
+                id="durasi"
+                value="1 Bulan"
                 disabled
               />
             </div>
             <div class="form-group">
-              <label for="nomorRekening">Nomor Rekening</label>
+              <label for="rekeningTujuan">Rekening Tujuan</label>
               <input
                 type="text"
                 class="form-control"
-                id="nomorRekening"
+                id="rekeningTujuan"
+                v-model="rekenings.rekening_tujuan"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="bayar">Jumlah Bayar</label>
+              <input
+                type="text"
+                class="form-control"
+                id="bayar"
+                v-model="rekenings.harga"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="rekeningPengirim">Rekening Pengirim</label>
+              <input
+                type="text"
+                class="form-control"
+                id="rekeningPengirim"
                 v-model="newInvoice.nomor_rekening"
               />
             </div>
@@ -217,6 +252,206 @@ const toggleSidebar = () => {
     </div>
   </div>
   <!-- End Modal Tambah Invoice -->
+
+  <!-- Modal Edit Invoice -->
+  <div
+    class="modal fade"
+    id="editInvoice"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="editInvoiceLabel"
+    aria-hidden="true"
+    ref="editInvoiceRef"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editInvoiceLabel">Edit Invoice</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Form Edit Invoice -->
+          <form @submit.prevent="addInvoice('0')">
+            <div class="form-group">
+              <label for="durasi">Durasi</label>
+              <input
+                type="text"
+                class="form-control"
+                id="durasi"
+                value="1 Bulan"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="rekeningTujuan">Rekening Tujuan</label>
+              <input
+                type="text"
+                class="form-control"
+                id="rekeningTujuan"
+                v-model="rekenings.rekening_tujuan"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="bayar">Jumlah Bayar</label>
+              <input
+                type="text"
+                class="form-control"
+                id="bayar"
+                v-model="rekenings.harga"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="rekeningPengirim">Rekening Pengirim</label>
+              <input
+                type="text"
+                class="form-control"
+                id="rekeningPengirim"
+                v-model="newInvoice.nomor_rekening"
+              />
+            </div>
+            <div class="form-group">
+              <label for="jumlahTransfer">Jumlah Transfer</label>
+              <input
+                type="text"
+                class="form-control"
+                id="jumlahTransfer"
+                v-model="newInvoice.jumlah_transfer"
+              />
+            </div>
+            <div class="form-group">
+              <label for="buktiTransfer">Bukti Transfer</label>
+              <input
+                type="file"
+                class="form-control"
+                id="buktiTransfer"
+                @change="handleFileUpload"
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Edit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal Edit Invoice -->
+
+  <!-- Modal Tambah Invoice -->
+  <div
+    class="modal fade"
+    id="perpanjangModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="perpanjangModalLabel"
+    aria-hidden="true"
+    ref="perpanjangModalRef"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="perpanjangModalLabel">Perpanjang Invoice</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Form Tambah Invoice -->
+          <form @submit.prevent="addInvoice('00')">
+            <div class="form-group">
+              <label for="durasi">Durasi</label>
+              <input
+                type="text"
+                class="form-control"
+                id="durasi"
+                value="1 Bulan"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="rekeningTujuan">Rekening Tujuan</label>
+              <input
+                type="text"
+                class="form-control"
+                id="rekeningTujuan"
+                v-model="rekenings.rekening_tujuan"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="bayar">Jumlah Bayar</label>
+              <input
+                type="text"
+                class="form-control"
+                id="bayar"
+                v-model="rekenings.harga"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label for="rekeningPengirim">Rekening Pengirim</label>
+              <input
+                type="text"
+                class="form-control"
+                id="rekeningPengirim"
+                v-model="newInvoice.nomor_rekening"
+              />
+            </div>
+            <div class="form-group">
+              <label for="jumlahTransfer">Jumlah Transfer</label>
+              <input
+                type="text"
+                class="form-control"
+                id="jumlahTransfer"
+                v-model="newInvoice.jumlah_transfer"
+              />
+            </div>
+            <div class="form-group">
+              <label for="buktiTransfer">Bukti Transfer</label>
+              <input
+                type="file"
+                class="form-control"
+                id="buktiTransfer"
+                @change="handleFileUpload"
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Perpanjang</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal Tambah Invoice -->
 </template>
 
 <script>
@@ -237,10 +472,11 @@ export default {
         jumlah_transfer: "",
         bukti_transfer: null,
       },
+      rekenings: [],
       user_id: null,
       role: null,
       ready: null,
-      today: null
+      today: null,
     };
   },
   methods: {
@@ -257,28 +493,54 @@ export default {
         this.invoices = response.data.data;
         this.ready = true;
 
-        console.log('tanggal :',response.data.data[0]['tanggal_berakhir']);
-        console.log(new Date(response.data.data[0]['tanggal_berakhir']) < new Date);
-        console.log('sekarang:', new Date());
+        console.log("tanggal :", response.data.data[0]["tanggal_berakhir"]);
+        console.log(
+          new Date(response.data.data[0]["tanggal_berakhir"]) < new Date()
+        );
+        console.log("sekarang:", new Date());
       } catch (error) {
         console.error(error);
       }
     },
-    addInvoice() {
+    async fetchDataRekening() {
+      try {
+        const response = await axios.get(
+          `https://backend-webmember.lumirainternational.com/api/auth/get-rekening`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        );
+        this.rekenings = response.data.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    addInvoice(status=null) {
+      this.ready = false
       // Membuat FormData untuk mengirim file
       const formData = new FormData();
       formData.append("nomor_rekening", this.newInvoice.nomor_rekening);
       formData.append("jumlah_transfer", this.newInvoice.jumlah_transfer);
       formData.append("bukti_transfer", this.newInvoice.bukti_transfer);
       formData.append("user_id", this.user_id);
+      if (status !== null) {
+        formData.append("status", status);
+        
+      }
 
       axios
-        .post("https://backend-webmember.lumirainternational.com/api/auth/create-invoice", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + sessionStorage.getItem("token"),
-          },
-        })
+        .post(
+          "https://backend-webmember.lumirainternational.com/api/auth/create-invoice",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        )
         .then((response) => {
           console.log(response.data);
           // Lakukan sesuatu setelah berhasil menambah invoice
@@ -287,6 +549,7 @@ export default {
             jumlah_transfer: "",
             bukti_transfer: null,
           };
+          this.fetchDataInvoice();
           this.showAlert();
         })
         .catch((error) => {
@@ -295,9 +558,14 @@ export default {
     },
 
     showAlert() {
-      // Use sweetalert2
-      this.$swal("Data Berhasil Dikirm!!").then(() => {
+      this.$swal({
+        title: "Request Success",
+        text: "Data Berhasil Dikirim!",
+        icon: "success", // Atau gunakan icon lain sesuai kebutuhan
+      }).then(() => {
         $("#addInvoiceModal").modal("hide");
+        $("#editInvoice").modal("hide");
+        $("#perpanjangModal").modal("hide");
       });
     },
     handleFileUpload(event) {
@@ -338,6 +606,7 @@ export default {
         }
         // success
         this.fetchDataInvoice();
+        this.fetchDataRekening();
         this.today = new Date();
         // akhir
       } catch (error) {
@@ -352,20 +621,6 @@ export default {
 </script>
 
 <style scoped>
-.preloader {
-  position: fixed;
-  opacity: 0.9;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  z-index: 999999;
-  background-color: #ffffff;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-image: url(/img/loader.gif);
-}
-
 /* Responsive typography */
 h1 {
   font-size: 40px;

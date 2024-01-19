@@ -28,12 +28,30 @@ const toggleSidebar = () => {
           <div class="col-1"></div>
           <div class="col-10">
             <div class="row mt-5">
-              <div class="col-sm-3"></div>
-              <div class="col-sm-9">
-                <button class="btn btn-warning me-2">Pending</button>
-                <button class="btn btn-success me-2">Active</button>
-                <button class="btn btn-secondary me-2">Expired</button>
-                <button class="btn btn-danger">Reject</button>
+              <div class="col-sm-9"></div>
+              <div class="col-sm-3">
+                <div class="dropdown">
+                  <button
+                    class="btn btn-secondary dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Filter
+                  </button>
+                  <div
+                    class="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton"
+                  >
+                    <a class="dropdown-item" href="#" @click="getInvoiceByStatus('0')">Pending</a>
+                    <a class="dropdown-item" href="#" @click="getInvoiceByStatus('1')">Active</a>
+                    <a class="dropdown-item" href="#" @click="getInvoiceByStatus('3')">Expired</a>
+                    <a class="dropdown-item" href="#" @click="getInvoiceByStatus('2')">Reject</a>
+                    <a class="dropdown-item" href="#" @click="getInvoiceByStatus('00')">Perpanjang</a>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="table-responsive">
@@ -42,6 +60,8 @@ const toggleSidebar = () => {
                 <thead>
                   <tr>
                     <th scope="col">No</th>
+                    <th scope="col">Nama</th>
+                    <th scope="col">No. HP</th>
                     <th scope="col">No. Rekening</th>
                     <th scope="col">Jumlah Transfer</th>
                     <th scope="col">Bukti Transfer</th>
@@ -52,12 +72,15 @@ const toggleSidebar = () => {
                 <tbody>
                   <tr v-for="(item, index) in invoices" :key="item.id">
                     <th scope="row">{{ index + 1 }}</th>
+                    <td>{{ item.user.name }}</td>
+                    <td>{{ item.user.no_hp }}</td>
                     <td>{{ item.nomor_rekening }}</td>
                     <td>{{ item.jumlah_transfer }}</td>
                     <td>
                       <img
                         :src="
-                          'https://backend-webmember.lumirainternational.com/storage/' + item.bukti_transfer
+                          'https://backend-webmember.lumirainternational.com/storage/' +
+                          item.bukti_transfer
                         "
                         alt="Bukti Transfer"
                         style="max-width: 100px; cursor: pointer"
@@ -65,28 +88,39 @@ const toggleSidebar = () => {
                       />
                     </td>
                     <td>
-                      <div class="bg-warning" v-if="item.status == '0'">Pending</div>
-                      <div class="bg-success" v-if="item.status == '1'">Active</div>
-                      <div class="bg-grey" v-if="item.status == '2'">Expired</div>
-                      <div class="bg-danger" v-if="item.status == '3'">Reject</div>
-                      </td>
+                      <div class="bg-warning text-white rounded text-center" v-if="item.status == '0'">
+                        Pending
+                      </div>
+                      <div class="bg-success text-white rounded text-center" v-if="item.status == '1'">
+                        Active
+                      </div>
+                      <div class="bg-danger rounded text-center" v-if="item.status == '2'">
+                        Reject
+                      </div>
+                      <div class="bg-secondary text-white rounded text-center" v-if="item.status == '3'">
+                        Expired
+                      </div>
+                      <div class="bg-primary text-white rounded text-center" v-if="item.status == '00'">
+                        Perpanjang
+                      </div>
+                    </td>
 
                     <td>
                       <button
-                        class="btn btn-danger"
-                        @click="actionInvoice(item.user_id, item.id, '2',)"
-                        v-if="item.status == '1'"
+                        class="btn btn-danger me-1"
+                        @click="konfirmasi(item.user_id, item.id, '2', item.user.name)"
+                        v-if="item.status == '1' || item.status == '0'"
                       >
                         Reject
                       </button>
                       <button
-                        class="btn btn-primary"
+                        class="btn btn-success"
                         @click="setDataAction(item.user_id, item.id, '1')"
-                        v-if="item.status == '0'"
+                        v-if="item.status == '0' || item.status == '00'"
                         data-toggle="modal"
                         data-target="#aturTanggal"
                       >
-                        Active
+                        Accept
                       </button>
                       <button
                         class="btn btn-success"
@@ -141,7 +175,16 @@ const toggleSidebar = () => {
         </div>
         <div class="modal-body">
           <!-- Form Atur Tanggal -->
-          <form @submit.prevent="actionInvoice(dataAction.user_id, dataAction.invoice_id, dataAction.status_invoice, dataAction.tanggal_berakhir)">
+          <form
+            @submit.prevent="
+              actionInvoice(
+                dataAction.user_id,
+                dataAction.invoice_id,
+                dataAction.status_invoice,
+                dataAction.tanggal_berakhir
+              )
+            "
+          >
             <div class="form-group">
               <label for="tanggal">Tanggal Berakhir</label>
               <input
@@ -195,7 +238,10 @@ const toggleSidebar = () => {
         </div>
         <div class="modal-body">
           <img
-            :src="'https://backend-webmember.lumirainternational.com/storage/' + path"
+            :src="
+              'https://backend-webmember.lumirainternational.com/storage/' +
+              path
+            "
             alt="Bukti Transfer"
             style="width: 100%"
           />
@@ -232,15 +278,15 @@ export default {
       user_id: null,
       path: null,
       dataAction: {
-        user_id:"",
+        user_id: "",
         invoice_id: "",
         status_invoice: "",
-        tanggal_berakhir: ""
+        tanggal_berakhir: "",
       },
     };
   },
   methods: {
-    setDataAction(userId, invoiceId, statusInvoice){
+    setDataAction(userId, invoiceId, statusInvoice) {
       this.dataAction.user_id = userId;
       this.dataAction.invoice_id = invoiceId;
       this.dataAction.status_invoice = statusInvoice;
@@ -263,13 +309,29 @@ export default {
         console.error(error);
       }
     },
-    
+    async getInvoiceByStatus(status) {
+      try {
+        this.ready = false;
+        const response = await axios.get(
+          `https://backend-webmember.lumirainternational.com/api/auth/invoice-status/${status}`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        );
+        this.invoices = response.data.data;
+        this.ready = true;
+        console.log("ini invoice", this.invoices);
+      } catch (error) {
+        console.error(error);
+      }
+    },
 
     detailBukti(bukti_transfer) {
       this.path = bukti_transfer;
       $("#detailBukti").modal("show");
     },
-
 
     async aturTanggal() {
       try {
@@ -287,6 +349,7 @@ export default {
           }
         );
         this.ready = false;
+        this.showAlert();
         this.getAllDataInvoice();
         console.log("ini invoice", this.invoices);
       } catch (error) {
@@ -294,18 +357,17 @@ export default {
       }
     },
 
-    async actionInvoice(userId, invoiceId, invoiceStatus, tanggal=null) {
+    async actionInvoice(userId, invoiceId, invoiceStatus, tanggal = null) {
       try {
         let formData = new FormData();
         formData.append("user_id", userId);
         formData.append("invoice_id", invoiceId);
         formData.append("status_invoice", invoiceStatus);
-        
-        tanggal != null ?
-        formData.append("tanggal_berakhir", tanggal):null;
+
+        tanggal != null ? formData.append("tanggal_berakhir", tanggal) : null;
 
         const response = await axios.post(
-          `http://127.0.0.1:8000/api/auth/action-invoice`,
+          `https://backend-webmember.lumirainternational.com/api/auth/action-invoice`,
           formData,
           {
             headers: {
@@ -316,12 +378,38 @@ export default {
 
         // Tambahkan penanganan respons sesuai kebutuhan
         console.log("Invoice berhasil ditolak:", response.data);
-
+        this.showAlert();
         this.ready = false;
         this.getAllDataInvoice();
       } catch (error) {
         console.error("Terjadi kesalahan:", error);
       }
+    },
+
+    showAlert() {
+      this.$swal({
+        title: "Request Success",
+        text: "Data Berhasil Dikirim!",
+        icon: "success", // Atau gunakan icon lain sesuai kebutuhan
+      }).then(() => {
+        $("#aturTanggal").modal("hide");
+      });
+    },
+    konfirmasi(user_id, invoice_id, status, user) {
+      Swal.fire({
+        title: `Apakah Anda yakin ingin mereject invoice ${user}?`,
+        text: "Anda akan keluar dari akun ini.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#061387",
+        confirmButtonText: "Reject",
+        cancelButtonText: "Batal",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.actionInvoice(user_id, invoice_id, status)    
+        }
+      });
     },
   },
   created() {

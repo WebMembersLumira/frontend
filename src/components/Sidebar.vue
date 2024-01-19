@@ -51,7 +51,7 @@
     <hr class="sidebar-divider" />
 
     <!-- Heading -->
-    <div class="sidebar-heading text-primary">Langganan</div>
+    <div class="sidebar-heading text-primary">Other</div>
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
@@ -64,7 +64,7 @@
         aria-controls="collapsePages"
       >
         <i class="fas fa-fw fa-folder text-primary"></i>
-        <span>Invoices</span>
+        <span>Members</span>
       </a>
       <div
         id="collapsePages"
@@ -73,35 +73,19 @@
         data-parent="#accordionSidebar"
       >
         <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Management Invoice</h6>
+          <h6 class="collapse-header">Management Member</h6>
           <router-link class="collapse-item" to="/admin-invoices">
-            <span>Pending</span>
+            <span>Invoices</span>
           </router-link>
-          <router-link class="collapse-item" to="/">
-            <span>Aktif</span>
+          <router-link class="collapse-item" to="/admin-users">
+            <span>Users</span>
           </router-link>
-          <router-link class="collapse-item" to="/">
-            <span>Berakhir</span>
-          </router-link>
-          <router-link class="collapse-item" to="/">
-            <span>Perpanjang</span>
-          </router-link>
+
         </div>
       </div>
     </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block" />
-     <li class="nav-item">
-      <router-link
-        class="nav-link text-primary"
-        to="/admin-users"
-        active-class="font-weight-bold text-primary active-link"
-      >
-        <i class="bi bi-journal-text text-primary"></i>
-        <span>Users</span>
-      </router-link>
-    </li>
+    
   </ul>
   <!-- End of Sidebar -->
 </template>

@@ -2,9 +2,6 @@
 import Sidebar from "../../components/Sidebar-User.vue";
 import Navbar from "../../components/Navbar.vue";
 import Footer from "../../components/Footer.vue";
-import ChatMe from "../../components/ChatMe.vue";
-import LineChart from "../../components/LineChart.vue";
-import PolarChart from "../../components/PolarChart.vue";
 import { ref } from "vue";
 
 const sidebarToggled = ref(false);
@@ -28,10 +25,57 @@ const toggleSidebar = () => {
         <!-- Begin Page Content -->
         <div class="container-fluid mt-4">
           <!-- Page Heading -->
-          <div
-            class="d-sm-flex align-items-center justify-content-between mb-4"
-          >
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800 text-center">Dashboard</h1>
+          </div>
+
+          <!-- Keunggulan ALICORN BOT -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">🦄 Keunggulan ALICORN BOT 🦄</h2>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">1. Mudah dipahami</li>
+                <li class="list-group-item">2. Pemakaian tidak ribet</li>
+                <li class="list-group-item">3. Owner sangat kooperatif dan responsif banget</li>
+                <li class="list-group-item">4. Indikator simpel tanpa banyak aturan</li>
+                <li class="list-group-item">5. Anti ngelag alasan jaringan</li>
+                <li class="list-group-item">6. Winrate indikator di atas 80%</li>
+                <li class="list-group-item">7. Respon cepat jika ada pertanyaan</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Ketentuan -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">🦄 KETENTUAN 🦄</h2>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">- Khusus MARKET Crypto IDX di Broker STOCKITY/BINOMO</li>
+                <li class="list-group-item">- Buka dari Chrome/Safari/Explorer</li>
+                <li class="list-group-item">- No Delay</li>
+                <li class="list-group-item">- 24 JAM RUNNING</li>
+                <li class="list-group-item">- Tersedia GRUP untuk saling belajar</li>
+                <li class="list-group-item">- OP MANUAL</li>
+                <li class="list-group-item">- ALICORN BOT memudahkan open posisi buy/sell hanya mengikuti sinyal/simbol</li>
+                <li class="list-group-item">- FREE GMEET 1X PERTEMUAN untuk pemahaman</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Aturan BOT ALICORN -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">🦄 ATURAN BOT ALICORN 🦄</h2>
+              <!-- Tambahkan informasi aturan BOT ALICORN di sini -->
+            </div>
+          </div>
+
+          <!-- Note -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">NOTE</h2>
+              <!-- Tambahkan informasi catatan di sini -->
+            </div>
           </div>
 
           <!-- Content Row -->
@@ -48,82 +92,6 @@ const toggleSidebar = () => {
     <!-- End of Content Wrapper -->
   </div>
 </template>
-<script>
-import axios from "axios";
-import {
-  Chart,
-  LineController,
-  LinearScale,
-  PointElement,
-  CategoryScale,
-} from "chart.js";
-Chart.register(LineController, LinearScale, PointElement, CategoryScale);
-
-export default {
-  data() {
-    return {
-      role: null,
-      lokasi: "",
-      note: "",
-      user: "",
-    };
-  },
-  methods: {
-    async fetchUser() {
-      try {
-        const response = await axios.get("https://10.11.10.243/backend/public/api/auth/user", {
-          headers: {
-            Authorization: "Bearer " + sessionStorage.getItem("token"),
-          },
-        });
-        this.user = response.data.data.length;
-      } catch (error) {
-        console.error(error);
-        const data = JSON.stringify(error.message);
-        sessionStorage.setItem("error", data);
-      }
-    },
-  },
-  created() {
-    const currentTimeUTC = new Date().toUTCString();
-    console.log("Waktu Sekarang (UTC):", new Date());
-
-    const token = sessionStorage.getItem("token");
-    console.log("test token: ", token);
-
-    if (token) {
-      try {
-        const tokenPayload = JSON.parse(atob(token.split(".")[1])); // Mendekode bagian payload dari token JWT
-        const expTimestamp = tokenPayload.exp;
-
-        const expDate = new Date(expTimestamp * 1000); // Konversi Unix Timestamp ke JavaScript Date
-
-        console.log("Waktu Kedaluwarsa (UTC):", expDate); // Tampilkan waktu kedaluwarsa dalam format UTC
-
-        if (new Date() > expDate) {
-          console.log("Keluar");
-          sessionStorage.removeItem("token");
-          this.$router.push("/");
-        } else {
-          console.log("Aman");
-        }
-
-        this.level = tokenPayload.level; // Ambil level pengguna dari payload
-        this.user_id = tokenPayload.id;
-        console.log('ini level: ',this.level);
-        if (this.level !== "0") {
-          this.$router.push("/unauthorized");
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error);
-        this.$router.push("/"); // Tindakan jika terjadi kesalahan dekode
-      }
-    } else {
-      this.$router.push("/"); // Tindakan jika token tidak ada (pengguna belum terautentikasi)
-    }
-  },
-};
-</script>
 
 <style>
 #content-wrapper {
@@ -132,5 +100,20 @@ export default {
 
 .customIndex {
   z-index: -1 !important;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.card-title {
+  color: #4e73df;
+}
+
+.list-group-item {
+  background-color: #f8f9fc;
+  border: none;
 }
 </style>

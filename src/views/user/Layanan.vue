@@ -31,7 +31,7 @@ const toggleSidebar = () => {
         <div class="d-flex justify-content-center">
           <iframe
             :src=link
-            width="90%"
+            width="95%"
             height="500px"
             frameborder="0"
             allowfullscreen
@@ -85,7 +85,7 @@ export default {
         else if (
           new Date(response.data.data[0]["tanggal_berakhir"]) < new Date()
         ) {
-          this.showAlert("Masa Langganan Sudah Berakhir, Silahkan perpanjang");
+          this.showAlert("Anda belum berlangganan, silahkan berlangganan terlebih dulu!!");
         }
         this.getLink();
       } catch (error) {
@@ -110,7 +110,11 @@ export default {
       }
     },
     showAlert(message) {
-      this.$swal(message).then(() => {
+      this.$swal({
+        title: "Layanan Tidak Tersedia",
+        text: message,
+        icon: "error", // Atau gunakan icon lain sesuai kebutuhan
+      }).then(() => {
         this.$router.push("user-invoice");
       });
     },

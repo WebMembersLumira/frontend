@@ -1,6 +1,6 @@
 <script setup>
 import Sidebar from "../../components/Sidebar.vue";
-import Navbar from "../../components/Navbar.vue";
+import Navbar from "../../components/Navbar-Admin.vue";
 import Footer from "../../components/Footer.vue";
 import ChatMe from "../../components/ChatMe.vue";
 import { ref } from "vue";
@@ -28,17 +28,30 @@ const toggleSidebar = () => {
         <h1 class="h3 mb-0 text-gray-800 text-center mt-4">Layanan</h1>
 
         <div class="container">
-          <button
-            class="btn btn-warning mb-3 mt-5"
-            data-toggle="modal"
-            data-target="#updateLayanan"
-          >
-            Update Layanan
-          </button>
+          <div class="row">
+            <div class="col-sm-6">
+              <button
+                class="btn btn-warning mb-3 mt-5"
+                data-toggle="modal"
+                data-target="#updateLayanan"
+              >
+                Update Layanan
+              </button>
+            </div>
+            <div class="col-sm-6">
+              <button
+                class="btn btn-primary mb-3 mt-5 float-end"
+                data-toggle="modal"
+                data-target="#updateRekening"
+              >
+                Update Rekening
+              </button>
+            </div>
+          </div>
           <!-- Embed Screenleap iframe -->
           <div class="d-flex justify-content-center">
             <iframe
-              src="https://screenleap.com/523071095"
+              :src="link"
               width="100%"
               height="500px"
               frameborder="0"
@@ -119,6 +132,67 @@ const toggleSidebar = () => {
     </div>
   </div>
   <!-- End Modal Update Layanan -->
+
+  <!-- Modal Update Rekening -->
+  <div
+    class="modal fade"
+    id="updateRekening"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="updateRekeningLabel"
+    aria-hidden="true"
+    ref="updateRekeningRef"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addInvoiceModalLabel">Update Rekening</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Form Update Rekening -->
+          <form @submit.prevent="setRekening()">
+            <div class="form-group">
+              <label for="rekPenerima">Rekening Penerima</label>
+              <input
+                type="text"
+                class="form-control"
+                id="rekPenerima"
+                v-model="formRekening.rekening_penerima"
+              />
+            </div>
+            <div class="form-group">
+              <label for="harga">Ketetapan Harga</label>
+              <input
+                type="text"
+                class="form-control"
+                id="harga"
+                v-model="formRekening.harga"
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal Update Rekening -->
 </template>
 
 <script>
@@ -131,11 +205,15 @@ export default {
       user_id: null,
       role: null,
       ready: null,
-      link:null,
-       formLink: {
+      link: null,
+      formLink: {
         judul: "",
-        link: ""
+        link: "",
       },
+      formRekening:{
+        rekening_penerima:'',
+        harga:''
+      }
     };
   },
   methods: {
@@ -146,25 +224,80 @@ export default {
       formData.append("link", this.formLink.link);
 
       axios
-        .post("https://backend-webmember.lumirainternational.com/api/auth/set-link", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + sessionStorage.getItem("token"),
-          },
-        })
+        .post(
+          "https://backend-webmember.lumirainternational.com/api/auth/set-link",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        )
         .then((response) => {
           console.log(response.data);
-          
+          this.formLink.judul = "";
+          this.formLink.link = "";
           this.showAlert();
         })
         .catch((error) => {
           console.error(error);
         });
     },
+
+    setRekening()
+    {
+      const formData = new FormData();
+      formData.append("rekening_tujuan", this.formRekening.rekening_penerima);
+      formData.append("harga", this.formRekening.harga);
+
+      axios
+        .post(
+          "https://backend-webmember.lumirainternational.com/api/auth/set-rekening",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          this.formRekening.rekening_penerima = "";
+          this.formRekening.harga = "";
+          this.showAlert();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+
+    async getLink() {
+      try {
+        const response = await axios.get(
+          `https://backend-webmember.lumirainternational.com/api/auth/get-link`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        );
+
+        console.log("link: ", response.data.data[0]["link"]);
+        this.link = response.data.data[0]["link"];
+      } catch (error) {
+        console.error(error);
+      }
+    },
     showAlert() {
-      // Use sweetalert2
-      this.$swal("Data Berhasil Dikirm!!").then(() => {
+      this.$swal({
+        title: "Request Success",
+        text: "Data Berhasil Dikirim!",
+        icon: "success", // Atau gunakan icon lain sesuai kebutuhan
+      }).then(() => {
         $("#updateLayanan").modal("hide");
+        $("#updateRekening").modal("hide");
       });
     },
   },
@@ -200,6 +333,7 @@ export default {
           this.$router.push("/");
         }
         // success
+        this.getLink();
         // akhir
       } catch (error) {
         console.error("Error decoding token:", error);

@@ -43,28 +43,17 @@
           <span class="mr-2 d-none d-lg-inline text-white small">{{
             this.name
           }}</span>
-          <!-- <img class="img-profile rounded-circle" src="/img/nobi.jpg" /> -->
-          <img
-            :src="'https://10.11.10.243/backend/public/storage/profile/' + gambar"
+          <!-- <img
+            :src="'https://backend-webmember.lumirainternational.com/storage/profile/' + gambar"
             alt=" gambarprofile"
             class="img-profile rounded-circle"
-          />
+          /> -->
         </a>
         <!-- Dropdown - User Information -->
         <div
           class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
           aria-labelledby="userDropdown"
         >
-          <router-link
-            class="dropdown-item"
-            to="/admin-profile"
-            data-toggle="modal"
-            data-target="#logoutModal"
-          >
-            <!-- <i class="fa-solid fa-user"></i> -->
-            <i class="fas fa-solid fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-            Profil
-          </router-link>
           <a
             class="dropdown-item"
             href="#"
@@ -132,7 +121,7 @@ export default {
       }
 
       axios
-        .post(`https://10.11.10.243/backend/public/api/auth/logout`, null, {
+        .post(`https://backend-webmember.lumirainternational.com/api/auth/logout`, null, {
           headers: {
             Authorization: "Bearer " + token,
           },

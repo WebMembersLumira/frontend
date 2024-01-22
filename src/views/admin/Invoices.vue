@@ -47,9 +47,9 @@ const toggleSidebar = () => {
                   >
                     <a class="dropdown-item" href="#" @click="getInvoiceByStatus('0')">Pending</a>
                     <a class="dropdown-item" href="#" @click="getInvoiceByStatus('1')">Active</a>
-                    <a class="dropdown-item" href="#" @click="getInvoiceByStatus('3')">Expired</a>
                     <a class="dropdown-item" href="#" @click="getInvoiceByStatus('2')">Reject</a>
-                    <a class="dropdown-item" href="#" @click="getInvoiceByStatus('00')">Perpanjang</a>
+                    <!-- <a class="dropdown-item" href="#" @click="getInvoiceByStatus('3')">Expired</a>
+                    <a class="dropdown-item" href="#" @click="getInvoiceByStatus('00')">Perpanjang</a> -->
                   </div>
                 </div>
               </div>
@@ -97,12 +97,12 @@ const toggleSidebar = () => {
                       <div class="bg-danger rounded text-center" v-if="item.status == '2'">
                         Reject
                       </div>
-                      <div class="bg-secondary text-white rounded text-center" v-if="item.status == '3'">
+                      <!-- <div class="bg-secondary text-white rounded text-center" v-if="item.status == '3'">
                         Expired
                       </div>
                       <div class="bg-primary text-white rounded text-center" v-if="item.status == '00'">
                         Perpanjang
-                      </div>
+                      </div> -->
                     </td>
 
                     <td>
@@ -122,7 +122,7 @@ const toggleSidebar = () => {
                       >
                         Accept
                       </button>
-                      <button
+                      <!-- <button
                         class="btn btn-success"
                         @click="setDataAction(item.user_id, item.id, '3')"
                         v-if="item.status == '3'"
@@ -130,7 +130,7 @@ const toggleSidebar = () => {
                         data-target="#aturTanggal"
                       >
                         Perpanjang
-                      </button>
+                      </button> -->
                     </td>
                   </tr>
                 </tbody>

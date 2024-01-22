@@ -78,7 +78,7 @@ const toggleSidebar = () => {
                           <a
                             target="_blank"
                             :href="
-                              'https://api.whatsapp.com/send?phone=' + item.telp
+                              'https://api.whatsapp.com/send?phone=62' + item.no_hp
                             "
                           >
                             <div
@@ -164,7 +164,7 @@ export default {
     },
     deleteItem(id) {
       axios
-        .delete(`https://backend-webmember.lumirainternational.com/api/auth/user/${id}`, {
+        .delete(`https://backend-webmember.lumirainternational.com/api/auth/delete-user/${id}`, {
           headers: {
             Authorization: "Bearer " + sessionStorage.getItem("token"),
           },
@@ -172,11 +172,21 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.ready = false;
+          this.showAlert();
           this.fetchData();
         })
         .catch((error) => {
           console.error(error);
         });
+    },
+    showAlert() {
+      this.$swal({
+        title: "Delete Success",
+        text: "Data Berhasil Dihapus!",
+        icon: "success", // Atau gunakan icon lain sesuai kebutuhan
+      }).then(() => {
+        $("#aturTanggal").modal("hide");
+      });
     },
   },
   created() {
@@ -227,7 +237,7 @@ export default {
 </script>
 
 <style scoped>
-.preloader{ 
+/* .preloader{ 
   position:fixed; 
   opacity: 0.9;
   left:0px; 
@@ -239,7 +249,7 @@ export default {
   background-position:center center; 
   background-repeat:no-repeat; 
   background-image:url(/img/loader.gif);
-}
+} */
 .whatsapp-icon {
   background-color: #25d366;
   color: #fff;

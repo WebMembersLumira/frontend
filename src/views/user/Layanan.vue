@@ -15,7 +15,7 @@ const toggleSidebar = () => {
 </script>
 <template>
   <div id="wrapper">
-    <Sidebar :class="sidebarClass" />
+    <!-- <Sidebar :class="sidebarClass" /> -->
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -30,7 +30,7 @@ const toggleSidebar = () => {
         <!-- Embed Screenleap iframe -->
         <div class="d-flex justify-content-center">
           <iframe
-            :src=link
+            :src="link"
             width="95%"
             height="500px"
             frameborder="0"
@@ -80,14 +80,15 @@ export default {
 
         if (response.data["status"] === 401) {
           this.showAlert("Anda belum berlangganan, silahkan berlangganan dulu");
-        }
-        // apakah tanggal saat ini melebihi tanggal akhir langganan?
-        else if (
+        } else if (
           new Date(response.data.data[0]["tanggal_berakhir"]) < new Date()
         ) {
-          this.showAlert("Anda belum berlangganan, silahkan berlangganan terlebih dulu!!");
+          this.showAlert(
+            "Anda belum berlangganan, silahkan berlangganan terlebih dulu!!"
+          );
+        }else{
+          this.getLink();
         }
-        this.getLink();
       } catch (error) {
         console.error(error);
       }
@@ -103,8 +104,8 @@ export default {
           }
         );
 
-        console.log("link: ", response.data.data[0]['link']);
-        this.link = response.data.data[0]['link'];
+        console.log("link: ", response.data.data[0]["link"]);
+        this.link = response.data.data[0]["link"];
       } catch (error) {
         console.error(error);
       }

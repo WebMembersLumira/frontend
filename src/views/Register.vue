@@ -17,7 +17,7 @@
                     class="form-control form-control-user mb-2"
                     id="name"
                     aria-describedby="name"
-                    placeholder="Masukkan Nama"
+                    placeholder="Masukkan nama"
                     v-model="name"
                   />
                   <input
@@ -25,27 +25,22 @@
                     class="form-control form-control-user mb-2"
                     id="email"
                     aria-describedby="email"
-                    placeholder="Masukkan Email"
+                    placeholder="Masukkan email"
                     v-model="email"
                   />
-                  <input
-                    type="number"
-                    class="form-control form-control-user mb-2"
-                    id="noHp"
-                    aria-describedby="noHp"
-                    placeholder="Masukkan nomor hp"
-                    v-model="noHp"
-                  />
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                    v-model="metodePembayaran"
-                  >
-                    <option selected>Pilih Metode Pembayaran</option>
-                    <option value="mandiri">Mandiri</option>
-                    <option value="bri">BRI</option>
-                    <option value="bni">BNI</option>
-                  </select>
+                  <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">+62</span>
+                    </div>
+                    <input
+                      type="number"
+                      class="form-control form-control-user"
+                      id="noHp"
+                      aria-describedby="noHp"
+                      placeholder="8972398127391"
+                      v-model="noHp"
+                    />
+                  </div>
                 </div>
 
                 <button

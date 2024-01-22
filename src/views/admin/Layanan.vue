@@ -56,7 +56,9 @@ const toggleSidebar = () => {
               height="500px"
               frameborder="0"
               allowfullscreen
+              v-if="ready"
             ></iframe>
+            <p v-if="!ready">Loading...</p>
           </div>
         </div>
 
@@ -204,7 +206,7 @@ export default {
     return {
       user_id: null,
       role: null,
-      ready: null,
+      ready: false,
       link: null,
       formLink: {
         judul: "",
@@ -239,6 +241,8 @@ export default {
           this.formLink.judul = "";
           this.formLink.link = "";
           this.showAlert();
+          this.ready = false;
+          this.getLink();
         })
         .catch((error) => {
           console.error(error);
@@ -286,6 +290,7 @@ export default {
 
         console.log("link: ", response.data.data[0]["link"]);
         this.link = response.data.data[0]["link"];
+        this.ready = true;
       } catch (error) {
         console.error(error);
       }

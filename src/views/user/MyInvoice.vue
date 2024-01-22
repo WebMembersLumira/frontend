@@ -35,8 +35,17 @@ const toggleSidebar = () => {
                   class="btn blueButton"
                   data-toggle="modal"
                   data-target="#addInvoiceModal"
+                  v-if="!disable"
                 >
                   Tambah Layanan
+                </button>
+                <button
+                  class="btn btn-secondary"
+                  data-toggle="modal"
+                  data-target="#addInvoiceModal"
+                  v-if="disable"
+                >
+                  Layanan Aktive
                 </button>
               </div>
               <div class="col-sm-9">
@@ -58,7 +67,6 @@ const toggleSidebar = () => {
                     <th scope="col">Bukti Transfer</th>
                     <th scope="col">Berlaku Hingga</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Aksi</th>
                   </tr>
                 </thead>
                 <!-- Table Body -->
@@ -117,23 +125,7 @@ const toggleSidebar = () => {
                         Perpanjang
                       </div>
                     </td>
-                    <td>
-                      <button
-                        class="btn btn-warning"
-                        data-toggle="modal"
-                        data-target="#editInvoice"
-                      >
-                        Update
-                      </button>
-                      <button 
-                      class="btn btn-success" 
-                      v-if="item.status == '3'"
-                      data-toggle="modal"
-                        data-target="#perpanjangModal"
-                        >
-                        Perpanjang
-                      </button>
-                    </td>
+                    
                   </tr>
                 </tbody>
               </DataTable>
@@ -172,6 +164,7 @@ const toggleSidebar = () => {
             class="close"
             data-dismiss="modal"
             aria-label="Close"
+            
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -477,6 +470,7 @@ export default {
       role: null,
       ready: null,
       today: null,
+      disable: false
     };
   },
   methods: {
@@ -492,12 +486,6 @@ export default {
         );
         this.invoices = response.data.data;
         this.ready = true;
-
-        console.log("tanggal :", response.data.data[0]["tanggal_berakhir"]);
-        console.log(
-          new Date(response.data.data[0]["tanggal_berakhir"]) < new Date()
-        );
-        console.log("sekarang:", new Date());
       } catch (error) {
         console.error(error);
       }
@@ -525,10 +513,10 @@ export default {
       formData.append("jumlah_transfer", this.newInvoice.jumlah_transfer);
       formData.append("bukti_transfer", this.newInvoice.bukti_transfer);
       formData.append("user_id", this.user_id);
-      if (status !== null) {
-        formData.append("status", status);
+      // if (status !== null) {
+      //   formData.append("status", status);
         
-      }
+      // }
 
       axios
         .post(
@@ -555,6 +543,29 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+    },
+
+    async checkMembership() {
+      try {
+        const response = await axios.get(
+          `https://backend-webmember.lumirainternational.com/api/auth/check-membership/${this.user_id}`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        );
+        this.ready = true;
+        console.log("data:", response.data["status"]);
+
+        if (
+          new Date(response.data.data[0]["tanggal_berakhir"]) > new Date()
+        ) {
+          this.disable = true;
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
 
     showAlert() {
@@ -607,6 +618,7 @@ export default {
         // success
         this.fetchDataInvoice();
         this.fetchDataRekening();
+        this.checkMembership();
         this.today = new Date();
         // akhir
       } catch (error) {

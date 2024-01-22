@@ -1,11 +1,11 @@
 <template>
   <div class="container bg-warning">
-    <div class="row">
+    <div class="row pt-3">
       <div class="col-md-6">
-        <h1 style="font-size: 2.5rem;">ALICORN</h1>
+        <h1 style="font-size: 24px; font-weight:bold">ALICORN</h1>
       </div>
       <div class="col-md-6">
-        <a href="#" class="float-end">Contact Us</a>
+        <a href="https://t.me/MrAlicorn" class="float-end text-black">Contact Us</a>
       </div>
     </div>
     <div class="row mt-5">

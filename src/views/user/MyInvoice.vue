@@ -30,12 +30,12 @@ const toggleSidebar = () => {
           <div class="col-1"></div>
           <div class="col-10">
             <div class="row mt-5">
-              <div class="col-sm-3">
+              <div class="col-sm-3" v-if="ready">
                 <button
                   class="btn blueButton"
                   data-toggle="modal"
                   data-target="#addInvoiceModal"
-                  v-if="!disable"
+                  v-if="invoices[0].status!='0' && invoices[0].status!='1'"
                 >
                   Tambah Layanan
                 </button>
@@ -43,9 +43,10 @@ const toggleSidebar = () => {
                   class="btn btn-secondary"
                   data-toggle="modal"
                   data-target="#addInvoiceModal"
-                  v-if="disable"
+                  v-if="invoices[0].status=='0' || invoices[0].status=='1'"
+                  disabled
                 >
-                  Layanan Aktive
+                  Terdapat Invoice
                 </button>
               </div>
               <div class="col-sm-9">
@@ -485,6 +486,7 @@ export default {
           }
         );
         this.invoices = response.data.data;
+        console.log('test status: ', this.invoices[0].status);
         this.ready = true;
       } catch (error) {
         console.error(error);
@@ -545,28 +547,28 @@ export default {
         });
     },
 
-    async checkMembership() {
-      try {
-        const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/check-membership/${this.user_id}`,
-          {
-            headers: {
-              Authorization: "Bearer " + sessionStorage.getItem("token"),
-            },
-          }
-        );
-        this.ready = true;
-        console.log("data:", response.data["status"]);
+    // async checkMembership() {
+    //   try {
+    //     const response = await axios.get(
+    //       `https://backend-webmember.lumirainternational.com/api/auth/check-membership/${this.user_id}`,
+    //       {
+    //         headers: {
+    //           Authorization: "Bearer " + sessionStorage.getItem("token"),
+    //         },
+    //       }
+    //     );
+    //     this.ready = true;
+    //     console.log("data:", response.data["status"]);
 
-        if (
-          new Date(response.data.data[0]["tanggal_berakhir"]) > new Date()
-        ) {
-          this.disable = true;
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
+    //     if (
+    //       new Date(response.data.data[0]["tanggal_berakhir"]) > new Date()
+    //     ) {
+    //       this.disable = true;
+    //     }
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // },
 
     showAlert() {
       this.$swal({
@@ -618,7 +620,7 @@ export default {
         // success
         this.fetchDataInvoice();
         this.fetchDataRekening();
-        this.checkMembership();
+        // this.checkMembership();
         this.today = new Date();
         // akhir
       } catch (error) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="container bg-warning">
+  <div class="container" style="background-color: #4e73df">
     <div class="row pt-3">
       <div class="col-md-6">
         <h1 style="font-size: 24px; font-weight:bold">ALICORN</h1>
@@ -34,7 +34,7 @@
     <div class="row mt-5 pb-5">
       <div class="col-md-6">
         <a href="/login">
-          <button class="btn btn-primary float-end">Login</button>
+          <button class="btn btn-warning float-end">Login</button>
         </a>
       </div>
       <div class="col-md-6">

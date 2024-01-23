@@ -52,12 +52,7 @@
               </form>
               <hr />
               <div class="text-center">
-                <router-link class="small" to="/lupa-password"
-                  >Lupa Password?</router-link
-                >
-              </div>
-              <div class="text-center">
-                <router-link class="small" to="/"
+                <router-link class="small" to="/login"
                   >Sudah punya akun? Login!</router-link
                 >
               </div>

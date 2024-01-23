@@ -78,7 +78,8 @@ const toggleSidebar = () => {
                           <a
                             target="_blank"
                             :href="
-                              'https://api.whatsapp.com/send?phone=62' + item.no_hp
+                              'https://api.whatsapp.com/send?phone=62' +
+                              item.no_hp
                             "
                           >
                             <div
@@ -92,11 +93,21 @@ const toggleSidebar = () => {
                         </div>
                         <div class="col-4">
                           <button
+                            @click="selectedUser(item.id)"
+                            data-toggle="modal"
+                            data-target="#updatepw"
+                            class="btn btn-warning customDetail"
+                          >
+                            <i class="bi bi-pencil-square"></i>
+                          </button>
+                        </div>
+                        <div class="col-4">
+                          <button
                             v-if="item.role != 'admin'"
                             @click="confirmDelete(item.id)"
                             class="btn btn-danger customDetail"
                           >
-<i class="bi bi-x-circle"></i>
+                            <i class="bi bi-trash-fill"></i>
                           </button>
                         </div>
                       </div>
@@ -119,6 +130,54 @@ const toggleSidebar = () => {
     <!-- End of Content Wrapper -->
   </div>
   <!-- End of Page Wrapper -->
+
+  <!-- Modal update pw-->
+  <div
+    class="modal fade"
+    id="updatepw"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="updatepwLabel"
+    aria-hidden="true"
+    ref="updatepwRef"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updatepwLabel">Ubah Password</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Form Ubah Password -->
+          <form @submit.prevent="updatePw">
+            <div class="form-group">
+              <label for="pw">Password Baru</label>
+              <input type="text" class="form-control" id="pw" v-model="newPw" />
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Batal
+              </button>
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal update pw -->
 </template>
 
 <script>
@@ -134,17 +193,57 @@ export default {
   data() {
     return {
       user: [],
-      ready: null
+      ready: null,
+      selectedUserId: "",
+      newPw: "",
     };
   },
   methods: {
-    // dengan token 
-    async fetchData() {
-      const response = await axios.get("https://backend-webmember.lumirainternational.com/api/auth/list-user", {
-        headers: {
-          Authorization: "Bearer " + sessionStorage.getItem("token"),
-        },
+    selectedUser(user_id) {
+      this.selectedUserId = user_id;
+    },
+    updatePw() {
+      // Membuat FormData untuk mengirim file
+      const formData = new FormData();
+      formData.append("password", this.newPw);
+      console.log('test id: ', this.selectedUserId);
+
+      axios
+        .post(
+          `https://backend-webmember.lumirainternational.com/api/auth/update-pw/${this.selectedUserId}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          Swal.fire({
+           title: "Update Success",
+        text: "Data Berhasil Diupdate!",
+        icon: "success", // Atau gunakan icon lain sesuai kebutuhan
+      }).then(() => {
+        $("#updatepw").modal("hide");
       });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+
+    // dengan token
+    async fetchData() {
+      const response = await axios.get(
+        "https://backend-webmember.lumirainternational.com/api/auth/list-user",
+        {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("token"),
+          },
+        }
+      );
       this.user = response.data.data;
       this.ready = true;
     },
@@ -164,11 +263,14 @@ export default {
     },
     deleteItem(id) {
       axios
-        .delete(`https://backend-webmember.lumirainternational.com/api/auth/delete-user/${id}`, {
-          headers: {
-            Authorization: "Bearer " + sessionStorage.getItem("token"),
-          },
-        })
+        .delete(
+          `https://backend-webmember.lumirainternational.com/api/auth/delete-user/${id}`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        )
         .then((response) => {
           console.log(response.data);
           this.ready = false;
@@ -215,7 +317,7 @@ export default {
           console.log("Aman");
         }
         const level = tokenPayload.level;
-        console.log('level:', level);
+        console.log("level:", level);
         if (level !== "1") {
           this.$router.push("/unauthorized");
         } else if (!header || !signature) {
@@ -266,11 +368,11 @@ export default {
   transition: background-color 0.3s ease;
 }
 
-.whatsapp-icon:hover{
+.whatsapp-icon:hover {
   background-color: #1aac50;
 }
 
-a{
+a {
   text-decoration: none;
 }
 

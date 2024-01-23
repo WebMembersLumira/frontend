@@ -92,11 +92,6 @@ import ChatMe from "../components/ChatMe.vue";
                   </form>
                   <hr />
                   <div class="text-center">
-                    <router-link class="small" to="/lupa-password"
-                      >Lupa Password?</router-link
-                    >
-                  </div>
-                  <div class="text-center">
                     <router-link class="small" to="/register"
                       >Buat Akun!</router-link
                     >

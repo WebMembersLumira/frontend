@@ -40,13 +40,13 @@ const toggleSidebar = () => {
                   Tambah Layanan
                 </button>
                 <button
-                  class="btn btn-secondary"
+                  class="btn btn-success"
                   data-toggle="modal"
                   data-target="#addInvoiceModal"
-                  v-if="invoices[0].status=='0' || invoices[0].status=='1'"
-                  disabled
+                  v-if="invoices[0].status=='1'"
+                  
                 >
-                  Terdapat Invoice
+                  Perpanjang Layanan
                 </button>
               </div>
               <div class="col-sm-9">
@@ -469,7 +469,7 @@ export default {
       rekenings: [],
       user_id: null,
       role: null,
-      ready: null,
+      ready: false,
       today: null,
       disable: false
     };
@@ -486,7 +486,6 @@ export default {
           }
         );
         this.invoices = response.data.data;
-        console.log('test status: ', this.invoices[0].status);
         this.ready = true;
       } catch (error) {
         console.error(error);
@@ -618,6 +617,7 @@ export default {
           this.$router.push("/");
         }
         // success
+        this.ready = false;
         this.fetchDataInvoice();
         this.fetchDataRekening();
         // this.checkMembership();

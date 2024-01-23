@@ -65,6 +65,7 @@ const toggleSidebar = () => {
                     <th scope="col">No. Rekening</th>
                     <th scope="col">Jumlah Transfer</th>
                     <th scope="col">Bukti Transfer</th>
+                    <th scope="col">Tanggal Berakhir</th>
                     <th scope="col">Status</th>
                     <th scope="col">Aksi</th>
                   </tr>
@@ -87,6 +88,7 @@ const toggleSidebar = () => {
                         @click="detailBukti(item.bukti_transfer)"
                       />
                     </td>
+                    <td>{{item.tanggal_berakhir}}</td>
                     <td>
                       <div class="bg-warning text-white rounded text-center" v-if="item.status == '0'">
                         Pending

@@ -2,18 +2,18 @@
   <div class="container" style="background-color: #4e73df">
     <div class="row pt-3">
       <div class="col-md-6">
-        <h1 style="font-size: 24px; font-weight:bold">ALICORN</h1>
+        <h1 style="font-size: 24px; font-weight:bold text-white">ALICORN</h1>
       </div>
       <div class="col-md-6">
-        <a href="https://t.me/MrAlicorn" class="float-end text-black">Contact Us</a>
+        <a href="https://t.me/MrAlicorn" class="float-end text-white">Contact Us</a>
       </div>
     </div>
     <div class="row mt-5">
       <div class="col-md-6">
-        <h1 style="font-size: 2rem;">ALICORN made you trade easier</h1>
-        <p>
+        <h1 style="font-size: 2rem;" class="text-white">ALICORN made you trade easier</h1>
+        <p class="text-white">
           Alicorn is a 24-hour live signal exclusively for Market Crypto IDX. 
-          <strong style="font-size: 1.2rem;">WHY ALICORN ?</strong>
+          <strong style="font-size: 1.2rem;" class="text-white">WHY ALICORN ?</strong>
           <ul>
             <li>Easy to use</li>
             <li>24-hour running</li>
@@ -51,7 +51,7 @@ h1,
 p,
 strong,
 li {
-  color: black;
+  color: white;
 }
 
 .container {

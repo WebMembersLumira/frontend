@@ -413,7 +413,7 @@ export default {
       axios
         .post(
           `https://backend-webmember.lumirainternational.com/api/auth/delete-langganan/${id}`,
-          formData,
+          
           {
             headers: {
               "Content-Type": "multipart/form-data",

@@ -75,6 +75,7 @@ const toggleSidebar = () => {
                 <thead>
                   <tr>
                     <th scope="col">No</th>
+                    <th scope="col">Nama Pengirim</th>
                     <th scope="col">Nomor Rekening</th>
                     <th scope="col">Jumlah Transfer</th>
                     <th scope="col">Bukti Transfer</th>
@@ -86,6 +87,7 @@ const toggleSidebar = () => {
                 <tbody>
                   <tr v-for="(item, index) in invoices" :key="item.id">
                     <th scope="row">{{ index + 1 }}</th>
+                    <td>{{ item.nama_pengirim }}</td>
                     <td>{{ item.nomor_rekening }}</td>
                     <td>{{ item.jumlah_transfer }}</td>
                     <td>
@@ -211,12 +213,21 @@ const toggleSidebar = () => {
               />
             </div>
             <div class="form-group">
-              <label for="rekeningPengirim">Rekening Pengirim</label>
+              <label for="rekeningPengirim">No Rekening / No Hp Pengirim</label>
               <input
                 type="text"
                 class="form-control"
                 id="rekeningPengirim"
                 v-model="newInvoice.nomor_rekening"
+              />
+            </div>
+            <div class="form-group">
+              <label for="namaPengirim">Nama Pengirim</label>
+              <input
+                type="text"
+                class="form-control"
+                id="namaPengirim"
+                v-model="newInvoice.nama_pengirim"
               />
             </div>
             <div class="form-group">
@@ -471,6 +482,7 @@ export default {
     return {
       invoices: [],
       newInvoice: {
+        nama_pengirim: "",
         nomor_rekening: "",
         jumlah_transfer: "",
         bukti_transfer: null,
@@ -522,6 +534,7 @@ export default {
       this.ready = false;
       // Membuat FormData untuk mengirim file
       const formData = new FormData();
+      formData.append("nama_pengirim", this.newInvoice.nama_pengirim);
       formData.append("nomor_rekening", this.newInvoice.nomor_rekening);
       formData.append("jumlah_transfer", this.newInvoice.jumlah_transfer);
       formData.append("bukti_transfer", this.newInvoice.bukti_transfer);

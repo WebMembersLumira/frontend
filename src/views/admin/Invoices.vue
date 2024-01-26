@@ -62,6 +62,7 @@ const toggleSidebar = () => {
                     <th scope="col">No</th>
                     <th scope="col">Nama</th>
                     <th scope="col">No. HP</th>
+                    <th scope="col">Nama Pengirim</th>
                     <th scope="col">No. Rekening</th>
                     <th scope="col">Jenis Langganan</th>
                     <th scope="col">Jumlah Transfer</th>
@@ -76,6 +77,7 @@ const toggleSidebar = () => {
                     <th scope="row">{{ index + 1 }}</th>
                     <td>{{ item.user.name }}</td>
                     <td>{{ item.user.no_hp }}</td>
+                    <td>{{ item.user.nama_pengirim }}</td>
                     <td>{{ item.nomor_rekening }}</td>
                     <td>{{ item.langganan.jenis_langganan }}</td>
                     <td>{{ item.jumlah_transfer }}</td>

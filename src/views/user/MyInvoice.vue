@@ -35,7 +35,8 @@ const toggleSidebar = () => {
                   class="btn blueButton"
                   data-toggle="modal"
                   data-target="#addInvoiceModal"
-                  v-if="invoices[0].status!='0' && invoices[0].status!='1'"
+                  v-if="invoices[0].status != '0' && invoices[0].status != '1'"
+                  @click="fetchDataLangganan()"
                 >
                   Tambah Layanan
                 </button>
@@ -43,8 +44,8 @@ const toggleSidebar = () => {
                   class="btn btn-success"
                   data-toggle="modal"
                   data-target="#addInvoiceModal"
-                  v-if="invoices[0].status=='1'"
-                  
+                  v-if="invoices[0].status == '1'"
+                  @click="fetchDataLangganan()"
                 >
                   Perpanjang Layanan
                 </button>
@@ -126,7 +127,6 @@ const toggleSidebar = () => {
                         Perpanjang
                       </div>
                     </td>
-                    
                   </tr>
                 </tbody>
               </DataTable>
@@ -165,7 +165,6 @@ const toggleSidebar = () => {
             class="close"
             data-dismiss="modal"
             aria-label="Close"
-            
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -174,15 +173,22 @@ const toggleSidebar = () => {
           <!-- Form Tambah Invoice -->
           <form @submit.prevent="addInvoice">
             <div class="form-group">
-              <label for="durasi">Durasi</label>
-              <input
-                type="text"
-                class="form-control"
-                id="durasi"
-                value="1 Bulan"
-                disabled
-              />
+                            <label for="rekeningTujuan">Jenis Langganan</label>
+              <select class="form-select" v-model="selectedLangganan" @change="onChangeLangganan">
+                <option value="" disabled selected>
+                  Pilih Jenis Langganan
+                </option>
+                <option
+                  v-for="langganan in listLangganan"
+                  :key="langganan.id"
+                  :value="langganan.id"
+                >
+                  {{ langganan.jenis_langganan }} - RP.{{ langganan.harga }}
+                </option>
+              </select>
             </div>
+
+           
             <div class="form-group">
               <label for="rekeningTujuan">Rekening Tujuan</label>
               <input
@@ -190,16 +196,6 @@ const toggleSidebar = () => {
                 class="form-control"
                 id="rekeningTujuan"
                 v-model="rekenings.rekening_tujuan"
-                disabled
-              />
-            </div>
-            <div class="form-group">
-              <label for="bayar">Jumlah Bayar</label>
-              <input
-                type="text"
-                class="form-control"
-                id="bayar"
-                v-model="rekenings.harga"
                 disabled
               />
             </div>
@@ -360,7 +356,9 @@ const toggleSidebar = () => {
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="perpanjangModalLabel">Perpanjang Invoice</h5>
+          <h5 class="modal-title" id="perpanjangModalLabel">
+            Perpanjang Invoice
+          </h5>
           <button
             type="button"
             class="close"
@@ -471,7 +469,9 @@ export default {
       role: null,
       ready: false,
       today: null,
-      disable: false
+      disable: false,
+      listLangganan: [],
+      selectedLangganan: "",
     };
   },
   methods: {
@@ -506,17 +506,18 @@ export default {
         console.error(error);
       }
     },
-    addInvoice(status=null) {
-      this.ready = false
+    addInvoice(status = null) {
+      this.ready = false;
       // Membuat FormData untuk mengirim file
       const formData = new FormData();
       formData.append("nomor_rekening", this.newInvoice.nomor_rekening);
       formData.append("jumlah_transfer", this.newInvoice.jumlah_transfer);
       formData.append("bukti_transfer", this.newInvoice.bukti_transfer);
       formData.append("user_id", this.user_id);
+      formData.append("langganan_id", this.selectedLangganan);
       // if (status !== null) {
       //   formData.append("status", status);
-        
+
       // }
 
       axios
@@ -544,6 +545,22 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+    },
+
+    async fetchDataLangganan() {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/list-langganan`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        );
+        this.listLangganan = response.data.data;
+      } catch (error) {
+        console.error(error);
+      }
     },
 
     // async checkMembership() {

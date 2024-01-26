@@ -37,16 +37,23 @@ const toggleSidebar = () => {
               >
                 Atur Layanan
               </button>
-            </div>
-            <div class="col-sm-6">
               <button
-                class="btn btn-primary mb-3 mt-5 float-end"
+                class="btn btn-primary mb-3 mt-5 ms-3"
                 data-toggle="modal"
                 data-target="#updateRekening"
               >
                 Atur Rekening
               </button>
+              <button
+                class="btn btn-primary mb-3 mt-5 ms-3"
+                data-toggle="modal"
+                data-target="#aturLangganan"
+                @click="getLangganan()"
+              >
+                Atur Langganan
+              </button>
             </div>
+            <div class="col-sm-6"></div>
           </div>
           <!-- Embed Screenleap iframe -->
           <div class="d-flex justify-content-center">
@@ -170,13 +177,91 @@ const toggleSidebar = () => {
                 v-model="formRekening.rekening_penerima"
               />
             </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal Update Rekening -->
+
+  <!-- Modal Atur Langganan -->
+  <div
+    class="modal fade"
+    id="aturLangganan"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="aturLanggananLabel"
+    aria-hidden="true"
+    ref="aturLanggananRef"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="aturLangganan">Atur Langganan</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table v-if="langgananReady" class="table table-striped m-auto">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Jenis Langganan</th>
+                <th scope="col">Harga</th>
+                <th scope="col">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in listLangganan" :key="item.id">
+                <th scope="row">{{ index + 1 }}</th>
+                <td>{{ item.jenis_langganan }}</td>
+                <td>{{ item.harga }}</td>
+                <td>
+                  <button class="btn btn-danger">
+                  <i class="bi bi-trash-fill"></i>
+
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p v-if="!langgananReady">Loading...</p>
+
+          <h5 class="mt-5 mb-2 text-center fw-bold">Tambah Jenis Langganan</h5>
+          <!-- Form Update Rekening -->
+          <form @submit.prevent="setLangganan()">
             <div class="form-group">
-              <label for="harga">Ketetapan Harga</label>
+              <label for="jenisLangganan">Jenis Langganan</label>
+              <input
+                type="text"
+                class="form-control"
+                id="jenisLangganan"
+                v-model="formLangganan.jenis_langganan"
+              />
+            </div>
+            <div class="form-group">
+              <label for="harga">Harga</label>
               <input
                 type="text"
                 class="form-control"
                 id="harga"
-                v-model="formRekening.harga"
+                v-model="formLangganan.harga"
               />
             </div>
             <div class="modal-footer">
@@ -194,7 +279,7 @@ const toggleSidebar = () => {
       </div>
     </div>
   </div>
-  <!-- End Modal Update Rekening -->
+  <!-- End Modal Atur Langganan -->
 </template>
 
 <script>
@@ -212,10 +297,15 @@ export default {
         judul: "",
         link: "",
       },
-      formRekening:{
-        rekening_penerima:'',
-        harga:''
-      }
+      formRekening: {
+        rekening_penerima: "",
+      },
+      formLangganan: {
+        jenis_langganan: "",
+        harga: "",
+      },
+      listLangganan: [],
+      langgananReady: false,
     };
   },
   methods: {
@@ -249,11 +339,9 @@ export default {
         });
     },
 
-    setRekening()
-    {
+    setRekening() {
       const formData = new FormData();
       formData.append("rekening_tujuan", this.formRekening.rekening_penerima);
-      formData.append("harga", this.formRekening.harga);
 
       axios
         .post(
@@ -269,7 +357,6 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.formRekening.rekening_penerima = "";
-          this.formRekening.harga = "";
           this.showAlert();
         })
         .catch((error) => {
@@ -295,6 +382,52 @@ export default {
         console.error(error);
       }
     },
+
+    setLangganan() {
+      // Membuat FormData untuk mengirim file
+      const formData = new FormData();
+      formData.append("jenis_langganan", this.formLangganan.jenis_langganan);
+      formData.append("harga", this.formLangganan.harga);
+
+      axios
+        .post(
+          "http://127.0.0.1:8000/api/set-langganan",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        )
+        .then((response) => {
+          this.formLangganan.jenis_langganan = "";
+          this.formLangganan.harga = "";
+          this.showAlert();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }, 
+
+    async getLangganan() {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/list-langganan`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        );
+
+        this.listLangganan = response.data.data;
+        this.langgananReady = true;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
     showAlert() {
       this.$swal({
         title: "Request Success",
@@ -303,6 +436,7 @@ export default {
       }).then(() => {
         $("#updateLayanan").modal("hide");
         $("#updateRekening").modal("hide");
+        $("#aturLangganan").modal("hide");
       });
     },
   },

@@ -48,7 +48,7 @@ const toggleSidebar = () => {
                 </li>
                 <li class="list-group-item">5. Anti ngelag alasan jaringan</li>
                 <li class="list-group-item">
-                  6. Winrate indikator di atas 80%
+                  6. Winrate indikator di atas 90%
                 </li>
                 <li class="list-group-item">
                   7. Respon cepat jika ada pertanyaan
@@ -143,7 +143,7 @@ const toggleSidebar = () => {
                 <li>SELALU PERHATIKAN SNR</li>
               </ul>
               <ol>
-                <li>SEMUA SINYAL MAK K2.</li>
+                <li>SEMUA SINYAL MAKSIMAL K2</li>
                 <li>SEMUA SINYAL HATI HATI JIKA ADA SNR DAN BORD LINE</li>
                 <li>JAGA EMOSI</li>
                 <li>JAGA NOMINAL OP SESUAIKAN SALDO</li>

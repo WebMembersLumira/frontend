@@ -30,7 +30,16 @@ const toggleSidebar = () => {
           <div class="col-1"></div>
           <div class="col-10">
             <div class="row mt-5">
-              <div class="col-sm-3" v-if="ready">
+              <button
+                  class="btn blueButton"
+                  data-toggle="modal"
+                  data-target="#addInvoiceModal"
+                  v-if="invoice.length === 0"
+                  @click="fetchDataLangganan()"
+                >
+                  Tambah Layanan
+                </button>
+              <div class="col-sm-3" v-if="invoice.length >0">
                 <button
                   class="btn blueButton"
                   data-toggle="modal"
@@ -486,6 +495,7 @@ export default {
           }
         );
         this.invoices = response.data.data;
+
         this.ready = true;
       } catch (error) {
         console.error(error);

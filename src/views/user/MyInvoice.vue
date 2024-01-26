@@ -550,7 +550,7 @@ export default {
     async fetchDataLangganan() {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/list-langganan`,
+          `https://backend-webmember.lumirainternational.com/api/auth/list-langganan`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

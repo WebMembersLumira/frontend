@@ -391,7 +391,7 @@ export default {
 
       axios
         .post(
-          "http://127.0.0.1:8000/api/set-langganan",
+          "https://backend-webmember.lumirainternational.com/api/auth/set-langganan",
           formData,
           {
             headers: {
@@ -409,11 +409,31 @@ export default {
           console.error(error);
         });
     }, 
+    deleteLangganan(id) {
+      axios
+        .post(
+          `https://backend-webmember.lumirainternational.com/api/auth/delete-langganan/${id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        )
+        .then((response) => {
+          this.langgananReady = false;
+          this.getLangganan();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }, 
 
     async getLangganan() {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/list-langganan`,
+          `https://backend-webmember.lumirainternational.com/api/auth/list-langganan`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

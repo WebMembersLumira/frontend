@@ -411,7 +411,7 @@ export default {
     }, 
     deleteLangganan(id) {
       axios
-        .post(
+        .delete(
           `https://backend-webmember.lumirainternational.com/api/auth/delete-langganan/${id}`,
           
           {

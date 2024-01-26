@@ -233,7 +233,7 @@ const toggleSidebar = () => {
                 <td>{{ item.jenis_langganan }}</td>
                 <td>{{ item.harga }}</td>
                 <td>
-                  <button class="btn btn-danger" @click="deleteLangganan()">
+                  <button class="btn btn-danger" @click="deleteLangganan(item.id)">
                   <i class="bi bi-trash-fill"></i>
 
                   </button>

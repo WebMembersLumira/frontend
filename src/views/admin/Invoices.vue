@@ -63,6 +63,7 @@ const toggleSidebar = () => {
                     <th scope="col">Nama</th>
                     <th scope="col">No. HP</th>
                     <th scope="col">No. Rekening</th>
+                    <th scope="col">Jenis Langganan</th>
                     <th scope="col">Jumlah Transfer</th>
                     <th scope="col">Bukti Transfer</th>
                     <th scope="col">Tanggal Berakhir</th>
@@ -76,6 +77,7 @@ const toggleSidebar = () => {
                     <td>{{ item.user.name }}</td>
                     <td>{{ item.user.no_hp }}</td>
                     <td>{{ item.nomor_rekening }}</td>
+                    <td>{{ item.langganan.jenis_langganan }}</td>
                     <td>{{ item.jumlah_transfer }}</td>
                     <td>
                       <img
@@ -88,7 +90,13 @@ const toggleSidebar = () => {
                         @click="detailBukti(item.bukti_transfer)"
                       />
                     </td>
-                    <td>{{item.tanggal_berakhir}}</td>
+                    <td>
+                      {{
+                        item.tanggal_berakhir != null
+                          ? item.tanggal_berakhir
+                          : "Belum Diatur"
+                      }}
+                    </td>
                     <td>
                       <div class="bg-warning text-white rounded text-center" v-if="item.status == '0'">
                         Pending

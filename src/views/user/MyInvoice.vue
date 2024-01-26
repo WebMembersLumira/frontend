@@ -34,12 +34,12 @@ const toggleSidebar = () => {
                   class="btn blueButton"
                   data-toggle="modal"
                   data-target="#addInvoiceModal"
-                  v-if="invoice.length === 0"
+                  v-if="invoices.length === 0"
                   @click="fetchDataLangganan()"
                 >
                   Tambah Layanan
                 </button>
-              <div class="col-sm-3" v-if="invoice.length >0">
+              <div class="col-sm-3" v-if="invoices.length >0">
                 <button
                   class="btn blueButton"
                   data-toggle="modal"

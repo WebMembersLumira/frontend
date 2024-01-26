@@ -9,8 +9,8 @@
           <a href="https://t.me/MrAlicorn" class="float-end text-white">Contact Us</a>
         </div>
       </div>
-      <h1 class="text-center" style="font-family: 'Abril Fatface', cursive; color: white;">ALICORN</h1>
-      <h2 style="font-size: 2rem; font-family: 'Ancient Signboard', cursive; color: white;" class="text-center">made you trade easier</h2>
+      <h1 class="text-center fw-bold mt-3" style="font-family: 'Abril Fatface'; color: white; font-size:65px">ALICORN</h1>
+      <h3 style="font-size: 25px; font-family: 'Ancient Signboard', cursive; color: white;" class="text-center">made you trade easier</h3>
       <div class="row mt-5">
         <div class="col-md-8">
           <p class="text-white" style="font-family: 'Futura', sans-serif;">

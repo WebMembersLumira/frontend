@@ -20,7 +20,7 @@ export default {
     return {
       showChatBox: false,
       message: "",
-      phoneNumber: "081907150504",
+      phoneNumber: "6281357617181",
       nama:"",
       lokasi:""
     };

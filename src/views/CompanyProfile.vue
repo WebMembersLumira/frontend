@@ -2,10 +2,10 @@
   <div class="template">
     <div class="container">
       <div class="row pt-3">
-        <div class="col-md-6">
+        <div class="col-6">
           <h1 style="font-size: 24px; font-weight:bold; font-family: 'Abril Fatface', cursive; color: white;">ALICORN</h1>
         </div>
-        <div class="col-md-6">
+        <div class="col-6">
           <a href="https://t.me/MrAlicorn" class="float-end text-white">Contact Us</a>
         </div>
       </div>
@@ -34,12 +34,12 @@
         </div>
       </div>
       <div class="row mt-5 pb-5">
-        <div class="col-md-6">
+        <div class="col-6">
           <a href="/login">
             <button class="btn btn-warning float-end">Login</button>
           </a>
         </div>
-        <div class="col-md-6">
+        <div class="col-6">
           <a href="/register">
             <button class="btn btn-success">Register</button>
           </a>

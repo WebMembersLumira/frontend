@@ -77,68 +77,85 @@ export default {
   },
   data() {
     return {
-      name: "",
-      email: "",
-      noHp: "",
+      name: null,
+      email: null,
+      noHp: null,
       metodePembayaran: "",
     };
   },
   methods: {
     registerUser() {
-      const formData = new FormData();
-      formData.append("name", this.name);
-      formData.append("email", this.email);
-      formData.append("no_hp", this.noHp);
-      formData.append("metode_pembayaran", this.metodePembayaran);
+      if (this.name == null || this.email == null || this.noHp == null) {
+        Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Terdapat data yang belum anda isi, mohon lengkapi semua data seblum mendaftar!!",
+                    confirmButtonText: "OK",
+        })
+      }else{
+         const formData = new FormData();
+    formData.append("name", this.name);
+    formData.append("email", this.email);
+    formData.append("no_hp", this.noHp);
 
-      // Kirim permintaan POST menggunakan Axios
-      axios
+    // Kirim permintaan POST menggunakan Axios
+    axios
         .post(
-          "https://backend-webmember.lumirainternational.com/api/auth/register",
-          formData
+            "https://backend-webmember.lumirainternational.com/api/auth/register",
+            formData
         )
         .then((response) => {
-          console.log(response.data);
-          // Menampilkan SweetAlert sukses
-          Swal.fire({
-            icon: "success",
-            title: "Pendaftaran berhasil!",
-            text: "Silahkan cek email untuk aktivasi akun.",
-            confirmButtonText: "OK",
-          }).then(() => {
-            // Arahkan pengguna ke rute '/'
-            this.$router.push("/");
-          });
+            console.log(response.data);
+            // Periksa status code respons
+            if (response.status === 201) {
+                // Menampilkan SweetAlert sukses
+                Swal.fire({
+                    icon: "success",
+                    title: "Pendaftaran berhasil!",
+                    text: "Silahkan cek email untuk aktivasi akun.",
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    // Arahkan pengguna ke rute '/'
+                    this.$router.push("/");
+                });
+            } else if (response.status === 400) {
+                // Menampilkan SweetAlert dengan pesan dari response
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Email atau nomor hp yang anda inputkan sama, data dilarang sama!!",
+                });
+            } else {
+                // Menampilkan SweetAlert dengan pesan umum
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Terjadi kesalahan saat mendaftar.",
+                });
+            }
         })
         .catch((error) => {
-          console.error(error);
-          if (
-            error.response &&
-            error.response.data &&
-            error.response.data.errors
-          ) {
-            const errors = error.response.data.errors;
-            let errorMessages = "";
-            Object.keys(errors).forEach((key) => {
-              errorMessages += `${errors[key]}\n`;
-            });
-
-            // Menampilkan SweetAlert error dengan pesan kesalahan
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: errorMessages,
-            });
-          } else {
-            // Menampilkan SweetAlert error umum
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Terjadi kesalahan saat mendaftar.",
-            });
-          }
+            console.error(error);
+            if (error.response && error.response.status === 400) {
+                // Menampilkan SweetAlert dengan pesan dari response
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Email atau nomor hp yang anda inputkan sama, data dilarang sama!!",
+                });
+            } else {
+                // Menampilkan SweetAlert error umum
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Terjadi kesalahan saat mendaftar.",
+                });
+            }
         });
-    },
+
+      }
+   },
+
   },
 };
 </script>

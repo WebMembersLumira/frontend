@@ -213,11 +213,12 @@ const toggleSidebar = () => {
               />
             </div>
             <div class="form-group">
-              <label for="rekeningPengirim">No Rekening / No Hp Pengirim</label>
+              <label for="rekeningPengirim">Nomor Rekening / Nomor Hp</label>
               <input
                 type="text"
                 class="form-control"
                 id="rekeningPengirim"
+                placeholder="nomor rekening atau hp pengirim uang"
                 v-model="newInvoice.nomor_rekening"
               />
             </div>
@@ -227,6 +228,7 @@ const toggleSidebar = () => {
                 type="text"
                 class="form-control"
                 id="namaPengirim"
+                placeholder="harus sesuai dengan rekening atau dompet digital"
                 v-model="newInvoice.nama_pengirim"
               />
             </div>
@@ -236,6 +238,7 @@ const toggleSidebar = () => {
                 type="text"
                 class="form-control"
                 id="jumlahTransfer"
+                placeholder="contoh: 250000"
                 v-model="newInvoice.jumlah_transfer"
               />
             </div>

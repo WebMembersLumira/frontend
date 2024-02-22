@@ -57,14 +57,10 @@ const toggleSidebar = () => {
           </div>
           <!-- Embed Screenleap iframe -->
           <div class="d-flex justify-content-center">
-            <iframe
-              :src="link"
-              width="100%"
-              height="500px"
-              frameborder="0"
-              allowfullscreen
-              v-if="ready"
-            ></iframe>
+            <object :data="link" type="text/html" width="100%" height="500px">
+              <p>Browser tidak mendukung.</p>
+            </object>
+
             <p v-if="!ready">Loading...</p>
           </div>
         </div>
@@ -233,9 +229,11 @@ const toggleSidebar = () => {
                 <td>{{ item.jenis_langganan }}</td>
                 <td>{{ item.harga }}</td>
                 <td>
-                  <button class="btn btn-danger" @click="deleteLangganan(item.id)">
-                  <i class="bi bi-trash-fill"></i>
-
+                  <button
+                    class="btn btn-danger"
+                    @click="deleteLangganan(item.id)"
+                  >
+                    <i class="bi bi-trash-fill"></i>
                   </button>
                 </td>
               </tr>
@@ -285,6 +283,22 @@ const toggleSidebar = () => {
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
+
+// Mencegah klik kanan di halaman
+document.addEventListener("contextmenu", function (event) {
+  event.preventDefault();
+});
+
+// Mencegah kombinasi keyboard untuk membuka alat pengembang
+document.onkeydown = function (event) {
+  if (event.keyCode == 123) {
+    // 123 adalah kode tombol untuk F12
+    return false;
+  } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) {
+    // Ctrl+Shift+I
+    return false;
+  }
+};
 
 export default {
   data() {
@@ -408,12 +422,12 @@ export default {
         .catch((error) => {
           console.error(error);
         });
-    }, 
+    },
     deleteLangganan(id) {
       axios
         .delete(
           `https://backend-webmember.lumirainternational.com/api/auth/delete-langganan/${id}`,
-          
+
           {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -428,7 +442,7 @@ export default {
         .catch((error) => {
           console.error(error);
         });
-    }, 
+    },
 
     async getLangganan() {
       try {

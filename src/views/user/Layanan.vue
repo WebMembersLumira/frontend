@@ -14,7 +14,7 @@ const toggleSidebar = () => {
 };
 </script>
 <template>
-  <div id="wrapper">
+  <div id="wrapper" oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;">
     <!-- <Sidebar :class="sidebarClass" /> -->
 
     <!-- Content Wrapper -->
@@ -30,13 +30,9 @@ const toggleSidebar = () => {
         <!-- Embed Screenleap iframe -->
             <!-- src="https://www.google.com" -->
         <div class="d-flex justify-content-center">
-          <iframe
-            :src="link"
-            width="95%"
-            height="500px"
-            frameborder="0"
-            allowfullscreen
-          ></iframe>
+          <object :data="link" type="text/html" width="100%" height="500px">
+              <p>Browser tidak mendukung.</p>
+            </object>
         </div>
 
         <!-- End Embed Screenleap iframe -->

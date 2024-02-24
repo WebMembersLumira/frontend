@@ -165,6 +165,93 @@ const toggleSidebar = () => {
     <!-- End of Content Wrapper -->
   </div>
 </template>
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      role: null,
+
+      user_id:'',
+      active_token:'',
+      myToken:''
+    };
+  },
+   methods: {
+    async getActiveToken(){
+       try {
+        const response = await axios.get(
+          `https://backend-webmember.lumirainternational.com/api/auth/active-token/${this.user_id}`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        );
+        this.active_token = response.data;
+        if (this.myToken !== this.active_token) {
+          this.showAlertAkun();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+        showAlertAkun() {
+          this.$swal({
+            title: "Request Failed",
+        text: "Akun anda sedang dibuka di perangkat lain!",
+        icon: "error",
+      }).then(() => {
+        sessionStorage.removeItem("token");
+        this.$router.push("/");
+      });
+    },
+  },
+  created() {
+    const token = sessionStorage.getItem("token"); // Ambil token dari local storage
+    this.myToken = token;
+
+    if (token) {
+      try {
+        const [headerBase64, signatureBase64] = token.split(".");
+        const header = JSON.parse(atob(headerBase64));
+        const signature = atob(signatureBase64);
+
+        const tokenPayload = JSON.parse(atob(token.split(".")[1])); // Mendekode bagian payload dari token JWT
+        const expTimestamp = tokenPayload.exp;
+
+        const expDate = new Date(expTimestamp * 1000); // Konversi Unix Timestamp ke JavaScript Date
+
+        console.log("Waktu Kedaluwarsa (UTC):", expDate.toUTCString()); // Tampilkan waktu kedaluwarsa dalam format UTC
+
+        if (new Date() > expDate) {
+          console.log("Keluar");
+          sessionStorage.removeItem("token");
+          this.$router.push("/");
+        } else {
+          console.log("Aman");
+        }
+        const level = tokenPayload.level; // Ambil level pengguna dari payload
+        this.user_id = tokenPayload.id;
+        if (level !== "0") {
+          this.$router.push("/unauthorized");
+        } else if (!header || !signature) {
+          this.$router.push("/");
+        }
+        // success
+        this.getActiveToken();
+        // akhir
+      } catch (error) {
+        this.$router.push("/"); // Tindakan jika terjadi kesalahan dekode
+      }
+    } else {
+      this.$router.push("/"); // Tindakan jika token tidak ada (pengguna belum terautentikasi)
+    }
+  },
+};
+</script>
+
 
 <style>
 #content-wrapper {

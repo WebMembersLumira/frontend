@@ -59,6 +59,8 @@ export default {
       role: null,
       ready: null,
       link: "",
+      active_token:'',
+      myToken:''
     };
   },
   methods: {
@@ -116,9 +118,38 @@ export default {
         this.$router.push("user-invoice");
       });
     },
+      async getActiveToken(){
+       try {
+        const response = await axios.get(
+          `https://backend-webmember.lumirainternational.com/api/auth/active-token/${this.user_id}`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        );
+        this.active_token = response.data;
+        if (this.myToken !== this.active_token) {
+          this.showAlertAkun();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+        showAlertAkun() {
+          this.$swal({
+            title: "Request Failed",
+        text: "Akun anda sedang dibuka di perangkat lain!",
+        icon: "error",
+      }).then(() => {
+        sessionStorage.removeItem("token");
+        this.$router.push("/");
+      });
+    },
   },
   created() {
     const token = sessionStorage.getItem("token"); // Ambil token dari local storage
+    this.myToken = token;
 
     if (token) {
       try {
@@ -150,6 +181,7 @@ export default {
         }
         // success
         this.checkMembership();
+        this.getActiveToken();
         // akhir
       } catch (error) {
         console.error("Error decoding token:", error);

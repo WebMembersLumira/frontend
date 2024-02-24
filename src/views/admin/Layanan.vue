@@ -56,7 +56,7 @@ const toggleSidebar = () => {
             <div class="col-sm-6"></div>
           </div>
           <!-- Embed Screenleap iframe -->
-          <div class="d-flex justify-content-center">
+          <div class="d-flex justify-content-center" v-cloak>
             <object :data="link" type="text/html" width="100%" height="500px">
               <p>Browser tidak mendukung.</p>
             </object>

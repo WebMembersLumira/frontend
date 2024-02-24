@@ -20,14 +20,6 @@
                     placeholder="Masukkan nama"
                     v-model="name"
                   />
-                  <input
-                    type="email"
-                    class="form-control form-control-user mb-2"
-                    id="email"
-                    aria-describedby="email"
-                    placeholder="Masukkan email"
-                    v-model="email"
-                  />
                   <div class="input-group mb-2">
                     <div class="input-group-prepend">
                       <span class="input-group-text">+62</span>
@@ -41,6 +33,22 @@
                       v-model="noHp"
                     />
                   </div>
+                  <input
+                    type="email"
+                    class="form-control form-control-user mb-2"
+                    id="email"
+                    aria-describedby="email"
+                    placeholder="Masukkan email"
+                    v-model="email"
+                  />
+                  <input
+                    type="password"
+                    class="form-control form-control-user mb-2"
+                    id="password"
+                    aria-describedby="password"
+                    placeholder="Masukkan password"
+                    v-model="password"
+                  />
                 </div>
 
                 <button
@@ -80,12 +88,12 @@ export default {
       name: null,
       email: null,
       noHp: null,
-      metodePembayaran: "",
+      password: null,
     };
   },
   methods: {
     registerUser() {
-      if (this.name == null || this.email == null || this.noHp == null) {
+      if (this.name == null || this.email == null || this.noHp == null || this.password == null) {
         Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -97,6 +105,7 @@ export default {
     formData.append("name", this.name);
     formData.append("email", this.email);
     formData.append("no_hp", this.noHp);
+    formData.append("password", this.password);
 
     // Kirim permintaan POST menggunakan Axios
     axios
@@ -112,11 +121,11 @@ export default {
                 Swal.fire({
                     icon: "success",
                     title: "Pendaftaran berhasil!",
-                    text: "Silahkan cek email untuk aktivasi akun.",
+                    text: "Silahkan login untuk masuk kedalam aplikasi.",
                     confirmButtonText: "OK",
                 }).then(() => {
                     // Arahkan pengguna ke rute '/'
-                    this.$router.push("/");
+                    this.$router.push("/login");
                 });
             } else if (response.status === 400) {
                 // Menampilkan SweetAlert dengan pesan dari response

@@ -78,9 +78,7 @@ const toggleSidebar = () => {
                   - ALICORN BOT memudahkan open posisi buy/sell hanya mengikuti
                   sinyal/simbol
                 </li>
-                <li class="list-group-item">
-                  - FREE GMEET 1X PERTEMUAN untuk pemahaman
-                </li>
+                
               </ul>
             </div>
           </div>

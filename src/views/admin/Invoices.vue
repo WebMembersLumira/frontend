@@ -84,7 +84,7 @@ const toggleSidebar = () => {
                     <td>
                       <img
                         :src="
-                          'https://backend-webmember.lumirainternational.com/storage/' +
+                          'https://backend.alicornbot.com/storage/' +
                           item.bukti_transfer
                         "
                         alt="Bukti Transfer"
@@ -251,7 +251,7 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <img
             :src="
-              'https://backend-webmember.lumirainternational.com/storage/' +
+              'https://backend.alicornbot.com/storage/' +
               path
             "
             alt="Bukti Transfer"
@@ -307,7 +307,7 @@ export default {
     async getAllDataInvoice() {
       try {
         const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/list-invoice`,
+          `https://backend.alicornbot.com/api/auth/list-invoice`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -325,7 +325,7 @@ export default {
       try {
         this.ready = false;
         const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/invoice-status/${status}`,
+          `https://backend.alicornbot.com/api/auth/invoice-status/${status}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -352,7 +352,7 @@ export default {
         formData.append("invoice_id", this.selectedInvoice);
         formData.append("tanggal_berakhir", this.date);
         const response = await axios.post(
-          `https://backend-webmember.lumirainternational.com/api/auth/atur-tanggal`,
+          `https://backend.alicornbot.com/api/auth/atur-tanggal`,
           formData,
           {
             headers: {
@@ -379,7 +379,7 @@ export default {
         tanggal != null ? formData.append("tanggal_berakhir", tanggal) : null;
 
         const response = await axios.post(
-          `https://backend-webmember.lumirainternational.com/api/auth/action-invoice`,
+          `https://backend.alicornbot.com/api/auth/action-invoice`,
           formData,
           {
             headers: {

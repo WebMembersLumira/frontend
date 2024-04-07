@@ -210,7 +210,7 @@ export default {
 
       axios
         .post(
-          `https://backend-webmember.lumirainternational.com/api/auth/update-pw/${this.selectedUserId}`,
+          `https://backend.alicornbot.com/api/auth/update-pw/${this.selectedUserId}`,
           formData,
           {
             headers: {
@@ -237,7 +237,7 @@ export default {
     // dengan token
     async fetchData() {
       const response = await axios.get(
-        "https://backend-webmember.lumirainternational.com/api/auth/list-user",
+        "https://backend.alicornbot.com/api/auth/list-user",
         {
           headers: {
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -264,7 +264,7 @@ export default {
     deleteItem(id) {
       axios
         .delete(
-          `https://backend-webmember.lumirainternational.com/api/auth/delete-user/${id}`,
+          `https://backend.alicornbot.com/api/auth/delete-user/${id}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

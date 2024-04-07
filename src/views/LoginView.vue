@@ -137,7 +137,7 @@ export default {
       formData.append("password", this.form.password);
 
       axios
-        .post("https://backend-webmember.lumirainternational.com/api/auth/login", formData)
+        .post("https://backend.alicornbot.com/api/auth/login", formData)
         .then((response) => {
           if (this.cheked === true) {
             const login = JSON.stringify(this.form);

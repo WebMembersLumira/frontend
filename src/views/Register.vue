@@ -110,7 +110,7 @@ export default {
     // Kirim permintaan POST menggunakan Axios
     axios
         .post(
-            "https://backend-webmember.lumirainternational.com/api/auth/register",
+            "https://backend.alicornbot.com/api/auth/register",
             formData
         )
         .then((response) => {

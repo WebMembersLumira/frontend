@@ -67,7 +67,7 @@ export default {
     async checkMembership() {
       try {
         const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/check-membership/${this.user_id}`,
+          `https://backend.alicornbot.com/api/auth/check-membership/${this.user_id}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -95,7 +95,7 @@ export default {
     async getLink() {
       try {
         const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/get-link`,
+          `https://backend.alicornbot.com/api/auth/get-link`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -121,7 +121,7 @@ export default {
       async getActiveToken(){
        try {
         const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/active-token/${this.user_id}`,
+          `https://backend.alicornbot.com/api/auth/active-token/${this.user_id}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

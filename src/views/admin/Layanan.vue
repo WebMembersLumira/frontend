@@ -331,7 +331,7 @@ export default {
 
       axios
         .post(
-          "https://backend-webmember.lumirainternational.com/api/auth/set-link",
+          "https://backend.alicornbot.com/api/auth/set-link",
           formData,
           {
             headers: {
@@ -359,7 +359,7 @@ export default {
 
       axios
         .post(
-          "https://backend-webmember.lumirainternational.com/api/auth/set-rekening",
+          "https://backend.alicornbot.com/api/auth/set-rekening",
           formData,
           {
             headers: {
@@ -381,7 +381,7 @@ export default {
     async getLink() {
       try {
         const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/get-link`,
+          `https://backend.alicornbot.com/api/auth/get-link`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -405,7 +405,7 @@ export default {
 
       axios
         .post(
-          "https://backend-webmember.lumirainternational.com/api/auth/set-langganan",
+          "https://backend.alicornbot.com/api/auth/set-langganan",
           formData,
           {
             headers: {
@@ -426,7 +426,7 @@ export default {
     deleteLangganan(id) {
       axios
         .delete(
-          `https://backend-webmember.lumirainternational.com/api/auth/delete-langganan/${id}`,
+          `https://backend.alicornbot.com/api/auth/delete-langganan/${id}`,
 
           {
             headers: {
@@ -447,7 +447,7 @@ export default {
     async getLangganan() {
       try {
         const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/list-langganan`,
+          `https://backend.alicornbot.com/api/auth/list-langganan`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

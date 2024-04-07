@@ -94,7 +94,7 @@ const toggleSidebar = () => {
                       <!-- Tampilkan gambar di dalam tabel -->
                       <img
                         :src="
-                          'https://backend-webmember.lumirainternational.com/storage/' +
+                          'https://backend.alicornbot.com/storage/' +
                           item.bukti_transfer
                         "
                         alt="Bukti Transfer"
@@ -504,7 +504,7 @@ export default {
     async fetchDataInvoice() {
       try {
         const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/list-myinvoice/${this.user_id}`,
+          `https://backend.alicornbot.com/api/auth/list-myinvoice/${this.user_id}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -521,7 +521,7 @@ export default {
     async fetchDataRekening() {
       try {
         const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/get-rekening`,
+          `https://backend.alicornbot.com/api/auth/get-rekening`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -550,7 +550,7 @@ export default {
 
       axios
         .post(
-          "https://backend-webmember.lumirainternational.com/api/auth/create-invoice",
+          "https://backend.alicornbot.com/api/auth/create-invoice",
           formData,
           {
             headers: {
@@ -578,7 +578,7 @@ export default {
     async fetchDataLangganan() {
       try {
         const response = await axios.get(
-          `https://backend-webmember.lumirainternational.com/api/auth/list-langganan`,
+          `https://backend.alicornbot.com/api/auth/list-langganan`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -594,7 +594,7 @@ export default {
     // async checkMembership() {
     //   try {
     //     const response = await axios.get(
-    //       `https://backend-webmember.lumirainternational.com/api/auth/check-membership/${this.user_id}`,
+    //       `https://backend.alicornbot.com/api/auth/check-membership/${this.user_id}`,
     //       {
     //         headers: {
     //           Authorization: "Bearer " + sessionStorage.getItem("token"),

@@ -220,7 +220,7 @@ const toggleSidebar = () => {
                 <th scope="col">No</th>
                 <th scope="col">Jenis Langganan</th>
                 <th scope="col">Harga</th>
-                <th scope="col">Aksi</th>
+                <!-- <th scope="col">Aksi</th> -->
               </tr>
             </thead>
             <tbody>
@@ -228,14 +228,14 @@ const toggleSidebar = () => {
                 <th scope="row">{{ index + 1 }}</th>
                 <td>{{ item.jenis_langganan }}</td>
                 <td>{{ item.harga }}</td>
-                <td>
+                <!-- <td>
                   <button
                     class="btn btn-danger"
                     @click="deleteLangganan(item.id)"
                   >
                     <i class="bi bi-trash-fill"></i>
                   </button>
-                </td>
+                </td> -->
               </tr>
             </tbody>
           </table>

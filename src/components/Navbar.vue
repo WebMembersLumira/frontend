@@ -119,7 +119,7 @@ export default {
       }
 
       axios
-        .post(`https://backend-webmember.lumirainternational.com/api/auth/logout`, null, {
+        .post(`https://backend.alicornbot.com/api/auth/logout`, null, {
           headers: {
             Authorization: "Bearer " + token,
           },

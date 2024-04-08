@@ -43,7 +43,7 @@
         active-class="font-weight-bold text-primary active-link"
       >
         <i class="bi bi-journal-text text-primary"></i>
-        <span>My Invoice</span>
+        <span>ORDER ALICORNBOT</span>
       </router-link>
     </li>
     <li class="nav-item">
@@ -53,7 +53,7 @@
         active-class="font-weight-bold text-primary active-link"
       >
         <i class="bi bi-journal-text text-primary"></i>
-        <span>Service</span>
+        <span>GO TO BOT</span>
       </router-link>
     </li>
   </ul>
